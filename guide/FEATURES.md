@@ -27,3 +27,10 @@ Dự án này là một nền tảng thi và trắc nghiệm hiện đại, hi�
    - Consumer ở backend sẽ lấy câu trả lời từ Redis, chấm điểm dựa trên dữ liệu từ PostgreSQL, lưu `ExamResult` (kết quả thi), và trả về bằng chứng chi tiết của bài làm.
 6. **Kiểm Tra Lịch Sử Chi Tiết**: 
    - Quản trị viên có thể xem bằng chứng chi tiết bài làm của người dùng trong một hộp thoại (modal) tương tác, làm nổi bật câu trả lời đúng và đáp án người dùng đã chọn.
+7. **Tích Hợp Trí Tuệ Nhân Tạo (AI)**:
+   - Sử dụng model Gemini 3.1 Flash Lite để tạo hàng loạt câu hỏi trắc nghiệm tự động từ từ khóa (topic).
+   - API Key được lưu trữ an toàn, bảo mật bằng cơ sở dữ liệu (`system` table), tránh rò rỉ mã nguồn.
+   - Xử lý retry tự động khi API của AI quá tải (High Demand).
+8. **Giới Hạn Thời Gian & Tự Động Nộp Bài**:
+   - Quản trị viên có thể cấu hình giới hạn thời gian (Time Limit) cho từng bài thi.
+   - Frontend hiển thị đồng hồ đếm ngược trực quan. Tự động khóa bài và nộp lên hệ thống khi hết giờ.

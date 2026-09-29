@@ -44,6 +44,11 @@ Khi được yêu cầu viết tính năng, bạn phải tuân thủ các quy t�
 - Controller chỉ đóng gói bài làm thành `ExamSubmittedEvent`, dùng `RabbitTemplate` ném vào Message Queue, sau đó lập tức trả về HTTP Status `202 ACCEPTED`.
 - Phải tạo một class `@RabbitListener` (Consumer) ở tầng Service để lắng nghe Queue này, tiến hành tính điểm ngầm và cập nhật kết quả cuối cùng xuống DB.
 
+### Feature 5: Tích hợp AI (Generative Language)
+- **Rule:** Khai báo logic gọi LLM (Gemini 3.1 Flash Lite) ở `AiService`, không để dính dáng cứng vào Controller.
+- Bắt buộc xử lý parse kết quả JSON cẩn thận, đồng thời có cơ chế Retry (vòng lặp + Thread.sleep) khi gặp lỗi 503 Service Unavailable (hoặc các lỗi HTTP khác do API quá tải).
+- Tuyệt đối không được hardcode API Key trong source code. Phải lưu API Key ở Database (`system` table, mapped với `SystemConfig` entity) và truy xuất lên khi cần.
+
 ## 4. CODE GENERATION INSTRUCTIONS
 Mỗi khi xuất code, hãy:
 1. Viết mã sạch (Clean Code), tên biến/hàm rõ ràng.

@@ -11,6 +11,7 @@ public record QuizDto(
         List<QuestionDto> questions,
         Boolean isActive,
         LocalDateTime startTime,
-        LocalDateTime endTime
+        LocalDateTime endTime,
+        Integer timeLimit
 ) {
 }

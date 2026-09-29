@@ -31,6 +31,7 @@ public class QuizService {
         quiz.setIsActive(request.isActive() != null ? request.isActive() : false);
         quiz.setStartTime(request.startTime());
         quiz.setEndTime(request.endTime());
+        quiz.setTimeLimit(request.timeLimit());
 
         request.questions().forEach(qRequest -> {
             Question question = new Question(
@@ -79,7 +80,8 @@ public class QuizService {
                 questionDtos,
                 quiz.getIsActive(),
                 quiz.getStartTime(),
-                quiz.getEndTime()
+                quiz.getEndTime(),
+                quiz.getTimeLimit()
         );
     }
 }

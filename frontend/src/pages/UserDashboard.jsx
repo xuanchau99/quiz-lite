@@ -130,9 +130,16 @@ export default function UserDashboard({ user, setUser }) {
                             isReady = true;
                             const diff = new Date(quiz.endTime) - now;
                             const totalSeconds = Math.floor(diff / 1000);
-                            const m = Math.floor(totalSeconds / 60).toString().padStart(2, '0');
-                            const s = (totalSeconds % 60).toString().padStart(2, '0');
-                            timerText = `${m}:${s} left`;
+                            const d = Math.floor(totalSeconds / (3600 * 24));
+                            const h = Math.floor((totalSeconds % (3600 * 24)) / 3600);
+                            const m = Math.floor((totalSeconds % 3600) / 60);
+                            const s = totalSeconds % 60;
+                            let parts = [];
+                            if (d > 0) parts.push(`${d}d`);
+                            if (h > 0 || d > 0) parts.push(`${h}h`);
+                            if (m > 0 || h > 0 || d > 0) parts.push(`${m}m`);
+                            parts.push(`${s}s`);
+                            timerText = `${parts.join(' ')} left`;
                             isDanger = diff < 60000; // Less than 1 minute
                         } else {
                             isReady = true;

@@ -202,3 +202,25 @@ flowchart TD
     STOMP -.->|"3. Bắn Real-time Message qua socket"| UI
     UI -->|"4. Bật Toast UI"| User
 ```
+
+## 7. Tích Hợp AI Trí Tuệ Nhân Tạo (Gemini API)
+**Mô tả:** Admin nhập chủ đề (topic), hệ thống tự gọi Google Gemini sinh câu hỏi dạng JSON.
+**Luồng xử lý cụ thể:**
+- **Frontend:** `AdminDashboard.jsx` thu thập topic, gọi `POST /api/v1/ai/generate-questions`.
+- **Backend:**
+  - `AiController.java` gọi `AiService.java.generateQuestions(topic, count)`.
+  - `AiService` gọi `SystemConfigRepository.findById("gemini_api_key")` để lấy khóa API từ Database (tránh lộ code).
+  - Khởi tạo `RestTemplate`, gửi POST request tới `https://generativelanguage.googleapis.com/.../gemini-3.1-flash-lite:generateContent`.
+  - Do API của Google có thể quá tải, một vòng lặp (for) được áp dụng: nếu trả về HTTP 503, tự động gọi `Thread.sleep(2000)` rồi retry (tối đa 3 lần).
+  - Khi có kết quả, loại bỏ các ký tự Markdown dư thừa (như ` ```json `), dùng `ObjectMapper` parse sang `List<Map<String, Object>>` và trả về `200 OK` cho Frontend điền tự động vào bảng tạo đề.
+
+## 8. Đồng Hồ Đếm Ngược & Tự Động Nộp Bài (Time Limit)
+**Mô tả:** Bài thi có giới hạn thời gian sẽ hiển thị đồng hồ và tự động nộp khi hết giờ.
+**Luồng xử lý cụ thể:**
+- **Backend:** Cột `timeLimit` được lưu dưới Database (`Quiz.java`), trả về frontend qua `QuizDto`.
+- **Frontend:**
+  - `TakeQuiz.jsx` nhận được `timeLimit` (> 0). Khi người dùng nhấn nút **Start Quiz Now**, trạng thái `hasStarted` được bật.
+  - Một bộ đếm (countdown timer) được khởi tạo bằng `setInterval` chạy ngầm. Cứ mỗi 1000ms, nó sẽ giảm biến `timeLeft` đi 1 giây. Giá trị này được gọi qua hàm format `Xd Yh Zm Ws` hiển thị lên UI.
+  - Khi `timeLeft` giảm bằng 0: 
+    - Khóa màn hình (`isLocked = true`) bằng một thẻ mờ nền đen.
+    - Một `useEffect` quan sát sự thay đổi của `timeLeft` sẽ được kích hoạt, gọi hàm `handleSubmit()` (đẩy lên RabbitMQ) một lần duy nhất.

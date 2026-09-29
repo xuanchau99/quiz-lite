@@ -18,15 +18,17 @@ export default function TakeQuiz({ user }) {
   const [submitted, setSubmitted] = useState(false);
   const [timeLeft, setTimeLeft] = useState(null);
   const [isLocked, setIsLocked] = useState(false);
+  const [hasStarted, setHasStarted] = useState(false);
+  const [countdownTimer, setCountdownTimer] = useState(null);
 
   useEffect(() => {
     loadQuiz();
   }, [id]);
 
   useEffect(() => {
-    if (!quiz) return;
+    if (!quiz || !hasStarted) return;
     
-    // Initial check
+    // Initial check for hard endTime
     const now = new Date();
     if (quiz.startTime && now < new Date(quiz.startTime)) {
       setIsLocked(true);
@@ -39,8 +41,25 @@ export default function TakeQuiz({ user }) {
       return;
     }
 
-    // Set up timer if endTime exists
-    if (quiz.endTime) {
+    // Set up timer if timeLimit exists
+    if (quiz.timeLimit && quiz.timeLimit > 0) {
+      if (timeLeft === null) {
+        setTimeLeft(quiz.timeLimit * 60 * 1000);
+      }
+      
+      const timer = setInterval(() => {
+        setTimeLeft(prev => {
+          if (prev <= 1000) {
+            clearInterval(timer);
+            return 0;
+          }
+          return prev - 1000;
+        });
+      }, 1000);
+      setCountdownTimer(timer);
+      return () => clearInterval(timer);
+    } else if (quiz.endTime) {
+      // Fallback to absolute endTime if no timeLimit
       const timer = setInterval(() => {
         const currentTime = new Date();
         const end = new Date(quiz.endTime);
@@ -49,27 +68,38 @@ export default function TakeQuiz({ user }) {
         if (diff <= 0) {
           clearInterval(timer);
           setTimeLeft(0);
-          setIsLocked(true);
-          // Auto submit
-          if (!submitted && !submitting) {
-             handleSubmit();
-          }
         } else {
           setTimeLeft(diff);
         }
       }, 1000);
+      setCountdownTimer(timer);
       return () => clearInterval(timer);
     }
-  }, [quiz, submitted, submitting]);
+  }, [quiz, hasStarted]);
 
-  const formatTime = (ms) => {
-    if (ms === null) return null;
-    if (ms <= 0) return "00:00";
-    const totalSeconds = Math.floor(ms / 1000);
-    const h = Math.floor(totalSeconds / 3600);
-    const m = Math.floor((totalSeconds % 3600) / 60).toString().padStart(2, '0');
-    const s = (totalSeconds % 60).toString().padStart(2, '0');
-    return h > 0 ? `${h}:${m}:${s}` : `${m}:${s}`;
+  // Effect specifically for handling auto-submit when time runs out
+  useEffect(() => {
+    if (timeLeft === 0 && !submitted && !submitting) {
+      setIsLocked(true);
+      handleSubmit();
+    }
+  }, [timeLeft, submitted, submitting]);
+
+  const handleStartQuiz = () => {
+    setHasStarted(true);
+  };
+
+    const formatTime = (ms) => {
+      if (ms === null) return null;
+      if (ms <= 0) return "00:00";
+      const totalSeconds = Math.floor(ms / 1000);
+      const d = Math.floor(totalSeconds / (3600 * 24));
+      const h = Math.floor((totalSeconds % (3600 * 24)) / 3600);
+      const m = Math.floor((totalSeconds % 3600) / 60).toString().padStart(2, '0');
+      const s = (totalSeconds % 60).toString().padStart(2, '0');
+      
+      if (d > 0) return `${d}d ${h}h ${m}m ${s}s`;
+      return h > 0 ? `${h}:${m}:${s}` : `${m}:${s}`;
   };
 
   const loadQuiz = async () => {
@@ -148,6 +178,44 @@ export default function TakeQuiz({ user }) {
             Your exam has been submitted to the queue. The grading processor is working on it.
           </p>
           <button className="btn-primary" onClick={() => navigate('/user')}>Return to Dashboard</button>
+        </div>
+      </div>
+    );
+  }
+
+  if (!hasStarted) {
+    return (
+      <div className="auth-container">
+        <div className="glass-panel" style={{ textAlign: 'center', maxWidth: 500, padding: 40 }}>
+          <h1 style={{ marginBottom: 16 }}>{quiz.title}</h1>
+          <p style={{ color: 'var(--text-secondary)', marginBottom: 24 }}>{quiz.description}</p>
+          
+          <div style={{ display: 'flex', justifyContent: 'center', gap: 20, marginBottom: 30 }}>
+            <div className="badge">
+              <span style={{ fontWeight: 'bold' }}>{quiz.questions?.length}</span> Questions
+            </div>
+            {quiz.timeLimit ? (
+              <div className="badge" style={{ color: '#f59e0b', background: 'rgba(245, 158, 11, 0.1)' }}>
+                <Clock size={16} style={{ marginRight: 6 }} />
+                <span style={{ fontWeight: 'bold' }}>{quiz.timeLimit}</span> minutes limit
+              </div>
+            ) : (
+              <div className="badge" style={{ color: '#60a5fa', background: 'rgba(59, 130, 246, 0.1)' }}>
+                No time limit
+              </div>
+            )}
+          </div>
+          
+          <div style={{ background: 'rgba(239, 68, 68, 0.1)', color: '#ef4444', padding: 12, borderRadius: 8, marginBottom: 24, fontSize: '0.9rem' }}>
+            <strong>Note:</strong> Once you start, the timer will begin. If time runs out, your answers will be automatically submitted.
+          </div>
+          
+          <div style={{ display: 'flex', gap: 10 }}>
+            <button className="btn-primary" style={{ background: 'transparent', border: '1px solid rgba(255,255,255,0.2)' }} onClick={() => navigate(-1)}>Cancel</button>
+            <button className="btn-accent" onClick={handleStartQuiz} style={{ flex: 1, padding: 12, fontSize: '1.1rem' }}>
+              Start Quiz Now
+            </button>
+          </div>
         </div>
       </div>
     );

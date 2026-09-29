@@ -20,6 +20,8 @@ public record QuizCreateRequest(
         
         java.time.LocalDateTime startTime,
         
-        java.time.LocalDateTime endTime
+        java.time.LocalDateTime endTime,
+
+        Integer timeLimit
 ) {
 }

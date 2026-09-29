@@ -15,11 +15,13 @@ export default function AdminDashboard({ user, setUser }) {
   // States for the Quiz Generator tab
   const [numQuestions, setNumQuestions] = useState(10);
   const [quizTitle, setQuizTitle] = useState('');
+  const [topic, setTopic] = useState('');
   const [loadingGen, setLoadingGen] = useState(false);
   const [message, setMessage] = useState('');
   const [isActive, setIsActive] = useState(true);
   const [startTime, setStartTime] = useState('');
   const [endTime, setEndTime] = useState('');
+  const [timeLimit, setTimeLimit] = useState('');
 
   // Pagination state
   const [currentPage, setCurrentPage] = useState(1);
@@ -91,23 +93,36 @@ export default function AdminDashboard({ user, setUser }) {
     setLoadingGen(true);
     setMessage('');
 
-    const englishQuestionsPool = [
-      { q: "What is the past tense of 'run'?", options: ["ran", "runned", "running", "rans"], a: "ran" },
-      { q: "Which word is an adjective?", options: ["Quickly", "Happiness", "Beautiful", "Run"], a: "Beautiful" },
-      { q: "She ___ to the store yesterday.", options: ["goes", "went", "going", "gone"], a: "went" },
-      { q: "I have been living here ___ 5 years.", options: ["since", "for", "in", "at"], a: "for" },
-      { q: "What is the synonym of 'happy'?", options: ["Sad", "Angry", "Joyful", "Tired"], a: "Joyful" },
-      { q: "He is the ___ person in the room.", options: ["tall", "taller", "tallest", "most tall"], a: "tallest" },
-      { q: "___ you like a cup of tea?", options: ["Would", "Do", "Are", "Have"], a: "Would" },
-      { q: "The book is ___ the table.", options: ["in", "on", "at", "by"], a: "on" },
-      { q: "They ___ playing football now.", options: ["is", "are", "do", "does"], a: "are" },
-      { q: "I don't have ___ money left.", options: ["some", "any", "many", "a few"], a: "any" }
-    ];
-
     try {
-      const questions = Array.from({ length: numQuestions }).map((_, i) => {
-        const item = englishQuestionsPool[Math.floor(Math.random() * englishQuestionsPool.length)];
-        // Đảo thứ tự nhẹ hoặc để nguyên, ở đây ta lấy ngẫu nhiên từ Pool
+      let rawQuestions = [];
+      
+      if (topic.trim() !== '') {
+        // AI Generation
+        rawQuestions = await fetchApi('/ai/generate-questions', {
+          method: 'POST',
+          body: JSON.stringify({ topic: topic.trim(), count: numQuestions })
+        });
+      } else {
+        // Fallback to pool if no topic is provided
+        const englishQuestionsPool = [
+          { q: "What is the past tense of 'run'?", options: ["ran", "runned", "running", "rans"], a: "ran" },
+          { q: "Which word is an adjective?", options: ["Quickly", "Happiness", "Beautiful", "Run"], a: "Beautiful" },
+          { q: "She ___ to the store yesterday.", options: ["goes", "went", "going", "gone"], a: "went" },
+          { q: "I have been living here ___ 5 years.", options: ["since", "for", "in", "at"], a: "for" },
+          { q: "What is the synonym of 'happy'?", options: ["Sad", "Angry", "Joyful", "Tired"], a: "Joyful" },
+          { q: "He is the ___ person in the room.", options: ["tall", "taller", "tallest", "most tall"], a: "tallest" },
+          { q: "___ you like a cup of tea?", options: ["Would", "Do", "Are", "Have"], a: "Would" },
+          { q: "The book is ___ the table.", options: ["in", "on", "at", "by"], a: "on" },
+          { q: "They ___ playing football now.", options: ["is", "are", "do", "does"], a: "are" },
+          { q: "I don't have ___ money left.", options: ["some", "any", "many", "a few"], a: "any" }
+        ];
+        
+        rawQuestions = Array.from({ length: numQuestions }).map(() => {
+          return englishQuestionsPool[Math.floor(Math.random() * englishQuestionsPool.length)];
+        });
+      }
+
+      const questions = rawQuestions.map((item) => {
         return {
           details: {
             keyword: item.q,
@@ -119,11 +134,12 @@ export default function AdminDashboard({ user, setUser }) {
       });
 
       const payload = {
-        title: quizTitle.trim() !== '' ? quizTitle : `English Proficiency Test - ${numQuestions} Questions`,
-        description: `Auto-generated test focusing on grammar and vocabulary.`,
+        title: quizTitle.trim() !== '' ? quizTitle : (topic.trim() !== '' ? `AI Quiz: ${topic}` : `English Proficiency Test - ${numQuestions} Questions`),
+        description: topic.trim() !== '' ? `AI generated quiz about ${topic}.` : `Auto-generated test focusing on grammar and vocabulary.`,
         isActive,
         startTime: startTime || null,
         endTime: endTime || null,
+        timeLimit: timeLimit ? parseInt(timeLimit, 10) : null,
         questions
       };
 
@@ -187,10 +203,26 @@ export default function AdminDashboard({ user, setUser }) {
               />
             </div>
             <div className="form-group">
+              <label>AI Topic (Optional)</label>
+              <input 
+                type="text" className="input-field" 
+                placeholder="E.g., Geography, ReactJS... (Leave blank for random English)"
+                value={topic} onChange={e => setTopic(e.target.value)} 
+              />
+            </div>
+            <div className="form-group">
               <label>Number of Questions</label>
               <input 
                 type="number" min="1" max="1000" className="input-field" 
                 value={numQuestions} onChange={e => setNumQuestions(Number(e.target.value))} required 
+              />
+            </div>
+            <div className="form-group">
+              <label>Time Limit (minutes - Optional)</label>
+              <input 
+                type="number" min="1" className="input-field" 
+                placeholder="Leave blank for no time limit"
+                value={timeLimit} onChange={e => setTimeLimit(e.target.value)} 
               />
             </div>
             <div className="form-group" style={{ display: 'flex', alignItems: 'center', gap: 10, marginTop: 15, marginBottom: 15 }}>
