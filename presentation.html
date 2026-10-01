@@ -1,0 +1,358 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Báo cáo Project: Quiz Lite</title>
+    
+    <!-- Reveal.js CSS -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/reveal.js/4.3.1/reset.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/reveal.js/4.3.1/reveal.min.css">
+    <!-- Theme CSS for controls/progress -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/reveal.js/4.3.1/theme/black.min.css">
+    <!-- FontAwesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+    <!-- Custom styling -->
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;800&display=swap');
+
+        /* FORCE DARK THEME - CHỐNG LỖI MÀU TRẮNG Ở TRÌNH DUYỆT */
+        html, body, .reveal-viewport, .reveal {
+            background-color: #0B1120 !important;
+            background-image: 
+                radial-gradient(at 0% 0%, hsla(253,16%,7%,1) 0, transparent 50%), 
+                radial-gradient(at 50% 0%, hsla(225,39%,30%,0.2) 0, transparent 50%), 
+                radial-gradient(at 100% 0%, hsla(339,49%,30%,0.2) 0, transparent 50%) !important;
+            color: #f8fafc !important;
+            font-family: 'Outfit', sans-serif !important;
+        }
+        
+        .reveal h1, .reveal h2, .reveal h3, .reveal h4, .reveal h5 {
+            font-family: 'Outfit', sans-serif !important;
+            color: #ffffff !important;
+            text-transform: none;
+        }
+
+        .reveal p, .reveal li {
+            color: #94a3b8 !important;
+            line-height: 1.6;
+        }
+
+        .highlight {
+            color: #38bdf8 !important;
+            font-weight: 600;
+        }
+
+        /* Titles */
+        .slide-title {
+            text-transform: uppercase !important;
+            background: linear-gradient(135deg, #38bdf8, #818cf8);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            font-weight: 800 !important;
+            font-size: 2.5rem !important;
+            margin-bottom: 40px !important;
+            display: inline-block;
+            border-bottom: 3px solid #38bdf8;
+            padding-bottom: 10px;
+        }
+
+        /* Cards */
+        .grid-3 {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 25px;
+            margin-top: 30px;
+        }
+        .card {
+            background: rgba(30, 41, 59, 0.7);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 20px;
+            padding: 30px 20px;
+            text-align: center;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+            transition: all 0.3s ease;
+        }
+        .card:hover {
+            transform: translateY(-10px);
+            border-color: #38bdf8;
+            box-shadow: 0 15px 40px rgba(56, 189, 248, 0.2);
+        }
+        .card i {
+            font-size: 4rem;
+            margin-bottom: 20px;
+        }
+        .card h4 {
+            font-size: 1.5rem !important;
+            margin-bottom: 10px !important;
+        }
+        .card p {
+            font-size: 1.1rem !important;
+            margin: 0;
+        }
+
+        /* Features */
+        .feature-item {
+            display: flex;
+            align-items: center;
+            background: rgba(30, 41, 59, 0.5);
+            border: 1px solid rgba(255,255,255,0.05);
+            border-radius: 15px;
+            padding: 20px 30px;
+            margin-bottom: 20px;
+            text-align: left;
+            transition: transform 0.2s;
+        }
+        .feature-item:hover {
+            transform: scale(1.02);
+            border-color: rgba(255,255,255,0.2);
+        }
+        .feature-item i {
+            font-size: 3rem;
+            margin-right: 30px;
+        }
+        .feature-item h4 {
+            margin: 0 0 5px 0 !important;
+            font-size: 1.4rem !important;
+        }
+        .feature-item p {
+            margin: 0 !important;
+            font-size: 1.1rem !important;
+        }
+
+        /* Architecture Flow */
+        .arch-container {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            background: rgba(15, 23, 42, 0.8);
+            border-radius: 20px;
+            padding: 40px;
+            border: 1px solid rgba(255,255,255,0.1);
+        }
+        .arch-node {
+            text-align: center;
+            position: relative;
+        }
+        .arch-icon {
+            width: 80px;
+            height: 80px;
+            border-radius: 50%;
+            background: rgba(255,255,255,0.05);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 15px auto;
+            border: 2px solid rgba(255,255,255,0.2);
+            font-size: 2.5rem;
+        }
+        .arch-node h5 {
+            margin: 0 !important;
+            font-size: 1.1rem !important;
+        }
+        .arch-node p {
+            font-size: 0.9rem !important;
+            margin-top: 5px !important;
+        }
+        .arch-arrow {
+            font-size: 2rem;
+            color: #475569;
+            animation: moveArrow 2s infinite linear;
+        }
+        @keyframes moveArrow {
+            0% { transform: translateX(-10px); opacity: 0.5; }
+            50% { transform: translateX(10px); opacity: 1; }
+            100% { transform: translateX(-10px); opacity: 0.5; }
+        }
+
+        /* Main Title styling */
+        .hero-title {
+            font-size: 5rem !important;
+            font-weight: 800 !important;
+            background: linear-gradient(135deg, #10B981, #38bdf8);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            margin-bottom: 20px !important;
+        }
+    </style>
+</head>
+<body>
+    <div class="reveal">
+        <div class="slides">
+            
+            <!-- SLIDE 1 -->
+            <section>
+                <div style="margin-bottom: 30px;">
+                    <i class="fa-solid fa-rocket" style="font-size: 5rem; color: #10B981;"></i>
+                </div>
+                <h1 class="hero-title">QUIZ LITE</h1>
+                <h3 style="color: #94a3b8 !important; font-weight: 300 !important;">Hệ Thống Thi Trắc Nghiệm Hiệu Suất Cao</h3>
+                
+                <div style="margin-top: 60px; display: inline-block; background: rgba(255,255,255,0.05); padding: 15px 40px; border-radius: 50px; border: 1px solid rgba(255,255,255,0.1);">
+                    <p style="margin: 0 !important; font-size: 1.2rem !important; color: #f8fafc !important;">
+                        <i class="fa-solid fa-user-tie" style="margin-right: 10px; color: #38bdf8;"></i>
+                        Tác giả: <strong style="color: #10B981;">ChauPX</strong>
+                    </p>
+                </div>
+            </section>
+
+            <!-- SLIDE 2 -->
+            <section>
+                <h2 class="slide-title">1. Bối cảnh & Thách thức</h2>
+                <div style="background: rgba(30, 41, 59, 0.7); border-radius: 20px; padding: 40px; text-align: left; border: 1px solid rgba(255,255,255,0.1);">
+                    <ul style="font-size: 1.4rem; padding-left: 20px; margin-bottom: 30px;">
+                        <li style="margin-bottom: 20px;">Hàng ngàn học sinh cùng thi, yêu cầu <span class="highlight">High Concurrency</span>.</li>
+                        <li style="margin-bottom: 20px;">Lượng <code>UPDATE</code> Database khổng lồ khi chọn đáp án dễ gây <span class="highlight">Bottleneck & Crash</span>.</li>
+                        <li>Cần kiến trúc linh hoạt để lưu trữ đa dạng loại câu hỏi (Đa hình).</li>
+                    </ul>
+                    <div style="background: rgba(239, 68, 68, 0.15); border-left: 5px solid #ef4444; padding: 20px; border-radius: 8px;">
+                        <i class="fa-solid fa-triangle-exclamation" style="color: #ef4444; margin-right: 10px;"></i>
+                        <span style="color: #fca5a5 !important;">Giải pháp truyền thống (PostgreSQL + Update trực tiếp) chắc chắn sẽ làm sập máy chủ!</span>
+                    </div>
+                </div>
+            </section>
+
+            <!-- SLIDE 3 -->
+            <section>
+                <h2 class="slide-title">2. Công Nghệ Sử Dụng</h2>
+                <div class="grid-3">
+                    <div class="card">
+                        <i class="fa-brands fa-java" style="color: #f87171;"></i>
+                        <h4 style="color: white !important;">Spring Boot 3</h4>
+                        <p>REST API & Security</p>
+                    </div>
+                    <div class="card">
+                        <i class="fa-solid fa-database" style="color: #38bdf8;"></i>
+                        <h4 style="color: white !important;">PostgreSQL</h4>
+                        <p>Dữ liệu JSONB</p>
+                    </div>
+                    <div class="card">
+                        <i class="fa-solid fa-bolt" style="color: #facc15;"></i>
+                        <h4 style="color: white !important;">Redis</h4>
+                        <p>Auto-save O(1)</p>
+                    </div>
+                    <div class="card">
+                        <i class="fa-solid fa-envelope-open-text" style="color: #fb923c;"></i>
+                        <h4 style="color: white !important;">RabbitMQ</h4>
+                        <p>Event-Driven Queue</p>
+                    </div>
+                    <div class="card">
+                        <i class="fa-brands fa-react" style="color: #22d3ee;"></i>
+                        <h4 style="color: white !important;">React + Vite</h4>
+                        <p>Glassmorphism UI</p>
+                    </div>
+                    <div class="card">
+                        <i class="fa-solid fa-brain" style="color: #a855f7;"></i>
+                        <h4 style="color: white !important;">AI Gemini</h4>
+                        <p>Generative LLM</p>
+                    </div>
+                </div>
+            </section>
+
+            <!-- SLIDE 4 -->
+            <section>
+                <h2 class="slide-title">3. Tính Năng Nổi Bật</h2>
+                
+                <div class="feature-item">
+                    <i class="fa-solid fa-shield-halved" style="color: #38bdf8;"></i>
+                    <div>
+                        <h4 style="color: white !important;">Security & Phân Quyền</h4>
+                        <p>Bảo mật Stateless bằng <strong>JWT</strong>. Phân quyền ADMIN/USER chặt chẽ.</p>
+                    </div>
+                </div>
+
+                <div class="feature-item">
+                    <i class="fa-solid fa-folder-tree" style="color: #10B981;"></i>
+                    <div>
+                        <h4 style="color: white !important;">Data Optimization</h4>
+                        <p>Khắc phục <strong>N+1 Query</strong> bằng <code>@EntityGraph</code>. Tối ưu Schema với <strong>JSONB</strong>.</p>
+                    </div>
+                </div>
+
+                <div class="feature-item">
+                    <i class="fa-solid fa-stopwatch" style="color: #f43f5e;"></i>
+                    <div>
+                        <h4 style="color: white !important;">Time Validation</h4>
+                        <p>Đếm ngược thời gian thi, tự động khóa giao diện và <strong>Auto-submit</strong> khi hết giờ.</p>
+                    </div>
+                </div>
+            </section>
+
+            <!-- SLIDE 5 -->
+            <section>
+                <h2 class="slide-title">4. Kiến Trúc Chịu Tải</h2>
+                
+                <div class="arch-container">
+                    <div class="arch-node">
+                        <div class="arch-icon" style="border-color: #10B981; color: #10B981;"><i class="fa-solid fa-user"></i></div>
+                        <h5 style="color: white !important;">Học Sinh</h5>
+                        <p>Click Đáp Án</p>
+                    </div>
+                    <i class="fa-solid fa-chevron-right arch-arrow"></i>
+                    
+                    <div class="arch-node">
+                        <div class="arch-icon" style="border-color: #facc15; color: #facc15;"><i class="fa-solid fa-server"></i></div>
+                        <h5 style="color: white !important;">Redis</h5>
+                        <p>Lưu tạm O(1)</p>
+                    </div>
+                    <i class="fa-solid fa-chevron-right arch-arrow"></i>
+                    
+                    <div class="arch-node">
+                        <div class="arch-icon" style="border-color: #fb923c; color: #fb923c;"><i class="fa-brands fa-rabbitmq"></i></div>
+                        <h5 style="color: white !important;">RabbitMQ</h5>
+                        <p>Đẩy Queue</p>
+                    </div>
+                    <i class="fa-solid fa-chevron-right arch-arrow"></i>
+                    
+                    <div class="arch-node">
+                        <div class="arch-icon" style="border-color: #38bdf8; color: #38bdf8;"><i class="fa-solid fa-bell"></i></div>
+                        <h5 style="color: white !important;">WebSocket</h5>
+                        <p>Báo điểm Live</p>
+                    </div>
+                </div>
+            </section>
+
+            <!-- SLIDE 6 -->
+            <section>
+                <h2 class="slide-title">5. Sức Mạnh Trí Tuệ Nhân Tạo</h2>
+                <div style="display: flex; align-items: center; justify-content: center; gap: 50px; background: rgba(30, 41, 59, 0.7); border-radius: 20px; padding: 40px; border: 1px solid rgba(255,255,255,0.1);">
+                    <div style="flex: 1; text-align: left;">
+                        <ul style="font-size: 1.3rem;">
+                            <li style="margin-bottom: 20px;">Nhập 1 <span class="highlight">Từ Khóa (Topic)</span> ➜ Tự sinh hàng trăm câu hỏi JSON.</li>
+                            <li style="margin-bottom: 20px;">Khóa API bảo mật trong <code>SystemConfig</code> (Database).</li>
+                            <li>Thuật toán <span class="highlight">Auto-Retry</span> thông minh: tự động vượt qua lỗi 503 khi Google Server quá tải.</li>
+                        </ul>
+                    </div>
+                    <div style="flex: 0.5; text-align: center;">
+                        <i class="fa-solid fa-brain" style="font-size: 8rem; color: #a855f7; filter: drop-shadow(0 0 20px rgba(168, 85, 247, 0.6));"></i>
+                        <h4 style="margin-top: 20px !important; color: #e9d5ff !important; font-weight: bold !important;">Gemini 3.1 Flash Lite</h4>
+                    </div>
+                </div>
+            </section>
+
+            <!-- SLIDE 7 -->
+            <section>
+                <h1 class="hero-title" style="font-size: 4rem !important; background: linear-gradient(135deg, #facc15, #fb923c); -webkit-background-clip: text; -webkit-text-fill-color: transparent;">THANK YOU</h1>
+                <h3 style="color: #94a3b8 !important;">Q & A / Live Demo</h3>
+                <div style="margin-top: 50px;">
+                    <i class="fa-solid fa-laptop-code" style="font-size: 6rem; color: rgba(255,255,255,0.1);"></i>
+                </div>
+            </section>
+
+        </div>
+    </div>
+
+    <!-- Reveal.js Scripts -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/reveal.js/4.3.1/reveal.min.js"></script>
+    <script>
+        Reveal.initialize({
+            hash: true,
+            transition: 'slide',
+            center: true,
+            progress: true,
+            controls: true,
+        });
+    </script>
+</body>
+</html>
