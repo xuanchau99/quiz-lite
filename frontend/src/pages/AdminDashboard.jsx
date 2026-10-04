@@ -16,6 +16,7 @@ export default function AdminDashboard({ user, setUser }) {
   const [numQuestions, setNumQuestions] = useState(10);
   const [quizTitle, setQuizTitle] = useState('');
   const [topic, setTopic] = useState('');
+  const [generationMode, setGenerationMode] = useState('ai');
   const [loadingGen, setLoadingGen] = useState(false);
   const [message, setMessage] = useState('');
   const [isActive, setIsActive] = useState(true);
@@ -96,14 +97,14 @@ export default function AdminDashboard({ user, setUser }) {
     try {
       let rawQuestions = [];
       
-      if (topic.trim() !== '') {
+      if (generationMode === 'ai') {
         // AI Generation
         rawQuestions = await fetchApi('/ai/generate-questions', {
           method: 'POST',
-          body: JSON.stringify({ topic: topic.trim(), count: numQuestions })
+          body: JSON.stringify({ topic: topic.trim() || 'General Knowledge', count: numQuestions })
         });
       } else {
-        // Fallback to pool if no topic is provided
+        // Fallback to pool / Manual mode
         const englishQuestionsPool = [
           { q: "What is the past tense of 'run'?", options: ["ran", "runned", "running", "rans"], a: "ran" },
           { q: "Which word is an adjective?", options: ["Quickly", "Happiness", "Beautiful", "Run"], a: "Beautiful" },
@@ -134,8 +135,8 @@ export default function AdminDashboard({ user, setUser }) {
       });
 
       const payload = {
-        title: quizTitle.trim() !== '' ? quizTitle : (topic.trim() !== '' ? `AI Quiz: ${topic}` : `English Proficiency Test - ${numQuestions} Questions`),
-        description: topic.trim() !== '' ? `AI generated quiz about ${topic}.` : `Auto-generated test focusing on grammar and vocabulary.`,
+        title: quizTitle.trim() !== '' ? quizTitle : (generationMode === 'ai' ? `AI Quiz: ${topic || 'General Knowledge'}` : `English Proficiency Test - ${numQuestions} Questions`),
+        description: generationMode === 'ai' ? `AI generated quiz about ${topic || 'General Knowledge'}.` : `Auto-generated test focusing on grammar and vocabulary.`,
         isActive,
         startTime: startTime || null,
         endTime: endTime || null,
@@ -194,6 +195,33 @@ export default function AdminDashboard({ user, setUser }) {
             Instantly create a new quiz filled with AI-generated questions. Perfect for testing system load.
           </p>
           <form onSubmit={handleGenerate}>
+            <div className="form-group" style={{ marginBottom: 15 }}>
+              <label style={{ fontWeight: 'bold' }}>Generation Mode</label>
+              <div style={{ display: 'flex', gap: 20, marginTop: 8 }}>
+                <label style={{ display: 'flex', alignItems: 'center', gap: 8, cursor: 'pointer' }}>
+                  <input 
+                    type="radio" 
+                    name="genMode" 
+                    value="ai" 
+                    checked={generationMode === 'ai'} 
+                    onChange={e => setGenerationMode(e.target.value)} 
+                    style={{ width: 16, height: 16, cursor: 'pointer' }}
+                  />
+                  AI Generate
+                </label>
+                <label style={{ display: 'flex', alignItems: 'center', gap: 8, cursor: 'pointer' }}>
+                  <input 
+                    type="radio" 
+                    name="genMode" 
+                    value="manual" 
+                    checked={generationMode === 'manual'} 
+                    onChange={e => setGenerationMode(e.target.value)}
+                    style={{ width: 16, height: 16, cursor: 'pointer' }}
+                  />
+                  Manual (English Pool)
+                </label>
+              </div>
+            </div>
             <div className="form-group">
               <label>Quiz Title (Optional)</label>
               <input 
@@ -202,14 +230,16 @@ export default function AdminDashboard({ user, setUser }) {
                 value={quizTitle} onChange={e => setQuizTitle(e.target.value)} 
               />
             </div>
-            <div className="form-group">
-              <label>AI Topic (Optional)</label>
-              <input 
-                type="text" className="input-field" 
-                placeholder="E.g., Geography, ReactJS... (Leave blank for random English)"
-                value={topic} onChange={e => setTopic(e.target.value)} 
-              />
-            </div>
+            {generationMode === 'ai' && (
+              <div className="form-group">
+                <label>AI Topic (Optional)</label>
+                <input 
+                  type="text" className="input-field" 
+                  placeholder="E.g., Geography, ReactJS..."
+                  value={topic} onChange={e => setTopic(e.target.value)} 
+                />
+              </div>
+            )}
             <div className="form-group">
               <label>Number of Questions</label>
               <input 
