@@ -275,7 +275,7 @@
                     style="margin-top: 60px; display: inline-block; background: rgba(255,255,255,0.05); padding: 15px 40px; border-radius: 50px; border: 1px solid rgba(255,255,255,0.1);">
                     <p style="margin: 0 !important; font-size: 1.2rem !important; color: #f8fafc !important;">
                         <i class="fa-solid fa-user-tie" style="margin-right: 10px; color: #38bdf8;"></i>
-                        Tác giả: <strong style="color: #10B981;">ChauPX</strong>
+                        Created by: <strong style="color: #10B981;">ChauPX</strong>
                     </p>
                 </div>
             </section>
@@ -289,14 +289,14 @@
                         <li style="margin-bottom: 20px;">Hàng ngàn học sinh cùng thi, yêu cầu <span
                                 class="highlight">High Concurrency</span>.</li>
                         <li style="margin-bottom: 20px;">Lượng <code>UPDATE</code> Database khổng lồ khi chọn đáp án dễ
-                            gây <span class="highlight">Bottleneck & Crash</span>.</li>
+                            gây <span class="highlight">tắc nghẽn Database & sập server</span>.</li>
                         <li>Cần kiến trúc linh hoạt để lưu trữ đa dạng loại câu hỏi (Đa hình).</li>
                     </ul>
                     <div
                         style="background: rgba(239, 68, 68, 0.15); border-left: 5px solid #ef4444; padding: 20px; border-radius: 8px;">
                         <i class="fa-solid fa-triangle-exclamation" style="color: #ef4444; margin-right: 10px;"></i>
                         <span style="color: #fca5a5 !important;">Giải pháp truyền thống (PostgreSQL + Update trực tiếp)
-                            chắc chắn sẽ làm sập máy chủ!</span>
+                            chắc chắn sẽ làm sập server!</span>
                     </div>
                 </div>
             </section>
@@ -384,8 +384,10 @@
                         <i class="fa-solid fa-stopwatch" style="color: #f43f5e;"></i>
                         <div>
                             <h4>Time Engine & Auto-Submit</h4>
-                            <p>Đếm ngược thời gian thực, đồng bộ Server - Client. Tự động khóa giao diện và <strong>ép
-                                    nộp bài</strong> chính xác khi hết giờ.</p>
+                            <p>Đếm ngược thời gian thực, đồng bộ Server - Client. Tự động khóa giao diện và
+                                <strong>force
+                                    nộp bài</strong> chính xác khi hết giờ.
+                            </p>
                         </div>
                     </div>
 
@@ -393,8 +395,7 @@
                         <i class="fa-solid fa-file-waveform" style="color: #6366f1;"></i>
                         <div>
                             <h4>Audit Trail & Rolling Log</h4>
-                            <p>Custom <code>ApiLoggingFilter</code> ghi vết Payload, Status, Latency ms. Xoay vòng file
-                                theo ngày (<strong>10MB/30 ngày</strong>) chống tràn ổ đĩa.</p>
+                            <p>Custom <code>ApiLoggingFilter</code> ghi vết Payload, Status, Latency ms.</p>
                         </div>
                     </div>
 
@@ -412,8 +413,7 @@
                         <i class="fa-solid fa-brain" style="color: #a855f7;"></i>
                         <div>
                             <h4>Sinh Đề Tự Động Bằng AI</h4>
-                            <p>Nhập 1 chủ đề, <strong>Gemini LLM</strong> tự sinh trọn bộ đề thi JSON chuẩn hóa. Tích
-                                hợp thuật toán <strong>Auto-Retry</strong> chống lỗi nghẽn 503.</p>
+                            <p>Nhập 1 chủ đề, <strong>Gemini LLM</strong> tự sinh trọn bộ đề thi JSON chuẩn hóa.</p>
                         </div>
                     </div>
                 </div>
@@ -459,15 +459,14 @@
 
             <!-- SLIDE 6 -->
             <section>
-                <h2 class="slide-title">5. Sức Mạnh Trí Tuệ Nhân Tạo</h2>
+                <h2 class="slide-title">5. Ứng dụng AI</h2>
                 <div
                     style="display: flex; align-items: center; justify-content: center; gap: 50px; background: rgba(30, 41, 59, 0.7); border-radius: 20px; padding: 40px; border: 1px solid rgba(255,255,255,0.1);">
                     <div style="flex: 1; text-align: left;">
                         <ul style="font-size: 1.3rem;">
                             <li style="margin-bottom: 20px;">Nhập 1 <span class="highlight">Từ Khóa (Topic)</span> ➜ Tự
                                 sinh hàng trăm câu hỏi JSON.</li>
-                            <li style="margin-bottom: 20px;">Khóa API bảo mật trong <code>SystemConfig</code>
-                                (Database).</li>
+                            <li style="margin-bottom: 20px;">Bảo mật API Key</li>
                             <li>Thuật toán <span class="highlight">Auto-Retry</span> thông minh: tự động vượt qua lỗi
                                 503 khi Google Server quá tải.</li>
                         </ul>
@@ -477,7 +476,7 @@
                             style="font-size: 8rem; color: #a855f7; filter: drop-shadow(0 0 20px rgba(168, 85, 247, 0.6));"></i>
                         <h4
                             style="margin-top: 20px !important; color: #e9d5ff !important; font-weight: bold !important;">
-                            Gemini 3.1 Flash Lite</h4>
+                            Gemini</h4>
                     </div>
                 </div>
             </section>
