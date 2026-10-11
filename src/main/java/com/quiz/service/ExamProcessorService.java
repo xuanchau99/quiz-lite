@@ -85,13 +85,13 @@ public class ExamProcessorService {
         
         // Notify the user about the result
         userRepository.findById(userId).ifPresent(user -> {
-            String message = "Bài thi '" + quiz.getTitle() + "' đã chấm xong. Điểm của bạn: " + finalScore + "/" + quiz.getQuestions().size();
+            String message = "The exam '" + quiz.getTitle() + "' has been graded. Your score: " + finalScore + "/" + quiz.getQuestions().size();
             notificationService.sendNotification(user, message);
             
             // Notify all admins
             java.util.List<User> admins = userRepository.findByRole(com.quiz.entity.Role.ADMIN);
             for (User admin : admins) {
-                String adminMsg = "Học sinh " + user.getUsername() + " vừa hoàn thành bài thi '" + quiz.getTitle() + "' với số điểm " + finalScore + "/" + quiz.getQuestions().size();
+                String adminMsg = "Student " + user.getUsername() + " has just completed the exam " + quiz.getTitle() + " with the score " + finalScore + "/" + quiz.getQuestions().size();
                 notificationService.sendNotification(admin, adminMsg);
             }
         });
