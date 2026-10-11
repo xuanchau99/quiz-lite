@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Kịch Bản Thuyết Trình & Demo: Quiz Lite</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+            color: #333;
+            background-color: #f4f7f6;
+            margin: 0;
+            padding: 20px;
+        }
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+            background-color: #fff;
+            padding: 40px;
+            border-radius: 8px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.05);
+        }
+        h1 {
+            text-align: center;
+            color: #2c3e50;
+            border-bottom: 3px solid #3498db;
+            padding-bottom: 15px;
+            margin-bottom: 30px;
+        }
+        h2 {
+            color: #2980b9;
+            margin-top: 40px;
+            border-bottom: 2px solid #ecf0f1;
+            padding-bottom: 5px;
+        }
+        h3 {
+            color: #d35400;
+            margin-top: 25px;
+        }
+        .action {
+            font-weight: bold;
+            color: #c0392b;
+        }
+        .speech {
+            font-style: italic;
+            color: #27ae60;
+            background-color: #f0fdf4;
+            padding: 12px;
+            border-left: 4px solid #27ae60;
+            margin: 10px 0;
+            border-radius: 0 4px 4px 0;
+        }
+        .box {
+            padding: 20px;
+            margin: 20px 0;
+            border-radius: 6px;
+        }
+        .strengths {
+            background-color: #e8f8f5;
+            border-left: 5px solid #1abc9c;
+        }
+        .weaknesses {
+            background-color: #fdf2e9;
+            border-left: 5px solid #e67e22;
+        }
+        ul {
+            padding-left: 20px;
+        }
+        li {
+            margin-bottom: 10px;
+        }
+        .tag {
+            background-color: #ecf0f1;
+            padding: 2px 6px;
+            border-radius: 4px;
+            font-size: 0.9em;
+            color: #7f8c8d;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🎤 Kịch Bản Thuyết Trình và Demo Dự Án: Quiz Lite</h1>
+
+        <h2>🌟 PHẦN 1: THUYẾT TRÌNH (SLIDES/TỔNG QUAN)</h2>
+
+        <h3>1. Lời mở đầu (1 phút)</h3>
+        <ul>
+            <li><span class="action">Chào hỏi:</span> <div class="speech">"Chào mọi người, hôm nay em xin phép trình bày về dự án Quiz Lite - Hệ Thống Thi Trắc Nghiệm Hiệu Suất Cao."</div></li>
+            <li><span class="action">Vấn đề (Pain-point):</span> <div class="speech">"Trong thực tế, các kỳ thi tập trung thường có hàng ngàn học sinh cùng truy cập và thao tác (chọn đáp án, nộp bài) cùng một thời điểm. Điều này dễ dẫn đến nghẽn mạng và sập Database nếu chúng ta chỉ dùng các kỹ thuật CRUD thông thường."</div></li>
+            <li><span class="action">Giải pháp:</span> <div class="speech">"Để giải quyết bài toán này, Quiz Lite được thiết kế với kiến trúc tối ưu để chịu tải cực cao, kết hợp xử lý bất đồng bộ và lưu trữ tạm thời siêu tốc, đồng thời tích hợp thêm AI để hỗ trợ giảng viên."</div></li>
+        </ul>
+
+        <h3>2. Kiến Trúc & Công Nghệ Cốt Lõi (2 phút)</h3>
+        <ul>
+            <li><strong>Core Backend:</strong> Java 17 + Spring Boot 3.x.</li>
+            <li><strong>Database tối ưu:</strong> PostgreSQL với kiểu dữ liệu <span class="tag">JSONB</span> giúp lưu trữ cấu trúc câu hỏi linh hoạt.</li>
+            <li><strong>Xử lý chịu tải cao:</strong> Sử dụng <strong>Redis</strong> lưu trữ dạng Hash (O(1)) để Auto-save đáp án học sinh mà không làm thắt cổ chai Database.</li>
+            <li><strong>Xử lý bất đồng bộ:</strong> Sử dụng <strong>RabbitMQ</strong> để đưa việc chấm điểm vào hàng đợi (queue), giúp hệ thống phản hồi mượt mà.</li>
+            <li><strong>Real-time:</strong> Thông báo điểm số ngay lập tức qua <strong>WebSocket (STOMP)</strong> sau khi RabbitMQ xử lý xong.</li>
+            <li><strong>AI:</strong> Tích hợp <strong>Google Gemini API</strong> tự động sinh bộ câu hỏi trắc nghiệm.</li>
+        </ul>
+
+        <h2>⚖️ PHẦN 2: ĐÁNH GIÁ ĐIỂM MẠNH & ĐIỂM YẾU</h2>
+        
+        <div class="box strengths">
+            <h3 style="margin-top: 0; color: #16a085;">✅ Điểm mạnh của hệ thống</h3>
+            <ul>
+                <li><strong>Chịu tải cực tốt (High-throughput):</strong> Sử dụng Redis để lưu bộ nhớ đệm (In-memory Cache) thay vì ghi trực tiếp xuống Database, loại bỏ hoàn toàn rủi ro quá tải DB khi hàng ngàn thí sinh click chọn đáp án cùng lúc.</li>
+                <li><strong>Luồng xử lý Non-blocking:</strong> Nhờ Message Broker (RabbitMQ), việc nộp bài và chấm điểm được tách rời. API trả về phản hồi tức thì (<span class="tag">202 ACCEPTED</span>), mang lại trải nghiệm người dùng không độ trễ.</li>
+                <li><strong>Cấu trúc dữ liệu linh hoạt:</strong> Áp dụng `JSONB` của PostgreSQL giúp dễ dàng thiết kế các loại câu hỏi đa dạng (Multiple choice, Điền từ, Kéo thả...) trong tương lai mà không cần thay đổi cấu trúc bảng (Schema).</li>
+                <li><strong>Bắt kịp xu hướng công nghệ:</strong> Tích hợp mượt mà với Generative AI (Google Gemini) giải quyết bài toán ra đề nhanh cho giáo viên.</li>
+            </ul>
+        </div>
+
+        <div class="box weaknesses">
+            <h3 style="margin-top: 0; color: #d35400;">🚧 Điểm yếu và Hướng cải thiện</h3>
+            <ul>
+                <li><strong>Thiếu cơ chế Read-Cache:</strong> Hệ thống hiện tại dùng Redis rất tốt cho luồng Ghi (Auto-save). Tuy nhiên, ở luồng Đọc (Lấy danh sách đề thi, lấy chi tiết hàng trăm câu hỏi), hệ thống vẫn đang query thẳng vào DB. <em>(Hướng cải thiện: Cần implement Redis Cache thêm cho API lấy đề thi).</em></li>
+                <li><strong>Single Point of Failure (Điểm chết độc nhất):</strong> Hiện dự án đang deploy theo mô hình Docker Compose đơn giản trên 1 node. Nếu Redis hoặc RabbitMQ sập, toàn bộ tiến trình thi sẽ đứt gãy. <em>(Hướng cải thiện: Cần cấu hình Redis Cluster và RabbitMQ Cluster).</em></li>
+                <li><strong>Khả năng theo dõi (Monitoring):</strong> Chưa có dashboard giám sát hệ thống thời gian thực. <em>(Hướng cải thiện: Cần tích hợp Prometheus + Grafana để giám sát lượng Memory của Redis và độ dài Queue của RabbitMQ).</em></li>
+                <li><strong>Kiến trúc nguyên khối (Monolith):</strong> Dù xử lý tốt nhưng vẫn là Monolith. Để chịu tải thực sự quy mô lớn (hàng triệu user), <em>cần tách thành Microservices (VD: Quiz Service riêng, Grading Service riêng) và chạy trên Kubernetes (K8s).</em></li>
+            </ul>
+        </div>
+
+        <h2>💻 PHẦN 3: KỊCH BẢN DEMO THỰC TẾ (HANDS-ON DEMO)</h2>
+
+        <h3>Kịch bản 1: Xác thực & Phân quyền</h3>
+        <ul>
+            <li><span class="action">Thao tác:</span> Đăng nhập với tài khoản Admin và User.</li>
+            <li><span class="action">Thuyết minh:</span> <div class="speech">"Hệ thống dùng JWT Stateless bảo mật. Dữ liệu được cô lập (Data Isolation) qua `@PreAuthorize` - User chỉ xem được kết quả thi của mình, Admin thì xem được tất cả."</div></li>
+        </ul>
+
+        <h3>Kịch bản 2: Admin tạo đề thi bằng AI</h3>
+        <ul>
+            <li><span class="action">Thao tác:</span> Đăng nhập Admin -> Vào giao diện tạo đề thi -> Nhập yêu cầu (VD: "Tạo 5 câu hỏi về Lịch sử Việt Nam") -> Bấm Generate.</li>
+            <li><span class="action">Thuyết minh:</span> <div class="speech">"Hệ thống tự động gọi API đến Google Gemini, bóc tách chuỗi JSON trả về và lưu vào DB. API Key được bảo mật an toàn trong Database chứ không hardcode."</div></li>
+        </ul>
+
+        <h3>Kịch bản 3: Auto-save chống nghẽn (Redis High-Throughput)</h3>
+        <ul>
+            <li><span class="action">Thao tác:</span> Đăng nhập User -> Làm bài thi -> Click chọn các đáp án liên tục. Mở màn hình console của Redis để show dữ liệu đang được lưu vào bộ nhớ.</li>
+            <li><span class="action">Thuyết minh:</span> <div class="speech">"Khi hàng ngàn học sinh chọn đáp án, hệ thống tuyệt đối không gọi UPDATE xuống DB. Toàn bộ thao tác ghi thẳng vào bộ nhớ RAM qua Redis Hash (O(1)). Nhờ đó, ứng dụng đạt tốc độ mili-giây và bảo vệ DB."</div></li>
+        </ul>
+
+        <h3>Kịch bản 4: Nộp bài bất đồng bộ & Real-time WebSocket</h3>
+        <ul>
+            <li><span class="action">Thao tác:</span> Bấm nộp bài (Submit) -> Màn hình báo nộp thành công tức thì -> 1-2 giây sau popup (Toast) báo điểm hiện lên góc màn hình.</li>
+            <li><span class="action">Thuyết minh:</span> <div class="speech">"API lập tức trả về phản hồi không bắt đợi chấm điểm. Một Event đã được đẩy vào RabbitMQ. Ở background, hệ thống lấy ra chấm, và khi xong, kết quả được bắn về giao diện người dùng qua WebSocket để báo điểm real-time."</div></li>
+        </ul>
+
+        <h3>Kịch bản 5: Tối ưu JPA (EntityGraph)</h3>
+        <ul>
+            <li><span class="action">Thao tác:</span> Xem lại chi tiết bài làm đã chấm. Show một chút code Repository để chứng minh tối ưu N+1.</li>
+            <li><span class="action">Thuyết minh:</span> <div class="speech">"Toàn bộ chi tiết được lưu bằng kiểu dữ liệu JSONB. Khi load đề thi với hàng trăm câu hỏi, em đã fix triệt để lỗi N+1 Query phổ biến của JPA bằng `@EntityGraph`, đảm bảo chỉ có 1 câu query duy nhất chạy xuống DB."</div></li>
+        </ul>
+
+        <h2>🎯 PHẦN 4: TỔNG KẾT (1 phút)</h2>
+        <ul>
+            <li><span class="action">Chốt lại:</span> <div class="speech">"Qua dự án Quiz Lite, em đã vận dụng thành thạo các kỹ năng cốt lõi của một Backend Developer: REST API, Tối ưu ORM, Message Broker, In-memory Cache và tích hợp AI. Hệ thống hoàn toàn sẵn sàng chịu tải."</div></li>
+            <li><span class="action">Kết thúc:</span> <div class="speech">"Cảm ơn mọi người đã lắng nghe. Mời mọi người đặt câu hỏi ạ."</div></li>
+        </ul>
+    </div>
+</body>
+</html>
