@@ -21,7 +21,10 @@ export const fetchApi = async (endpoint, options = {}) => {
   // Handle HTTP errors
   if (!response.ok) {
     // If the token is invalid or expired, forcefully log the user out
-    if (response.status === 401 || response.status === 403) {
+    // Skip this redirect if we are actively trying to login or register
+    if ((response.status === 401 || response.status === 403) && 
+        !endpoint.includes('/auth/login') && 
+        !endpoint.includes('/auth/register')) {
       localStorage.clear();
       window.location.href = '/login';
       return null;
@@ -33,6 +36,11 @@ export const fetchApi = async (endpoint, options = {}) => {
       const errorData = await response.json();
       errorMsg = errorData.message || errorMsg;
     } catch(e) {}
+    
+    if (endpoint.includes('/auth/login') && (response.status === 401 || response.status === 403)) {
+      errorMsg = 'Invalid username or password';
+    }
+    
     throw new Error(errorMsg);
   }
   
