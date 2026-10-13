@@ -23,6 +23,8 @@ export default function AdminDashboard({ user, setUser }) {
   const [startTime, setStartTime] = useState('');
   const [endTime, setEndTime] = useState('');
   const [timeLimit, setTimeLimit] = useState('');
+  const [previewData, setPreviewData] = useState(null); // { payload, questions } for preview modal
+  const [savingQuiz, setSavingQuiz] = useState(false);
 
   // Pagination state
   const [currentPage, setCurrentPage] = useState(1);
@@ -89,6 +91,10 @@ export default function AdminDashboard({ user, setUser }) {
    * Generates a mock quiz by randomly selecting questions from an English pool.
    * Leverages PostgreSQL's JSONB dynamically through the backend.
    */
+  /**
+   * Step 1: Generate questions (AI or Manual pool) and show preview modal.
+   * Does NOT save yet — waits for admin confirmation.
+   */
   const handleGenerate = async (e) => {
     e.preventDefault();
     setLoadingGen(true);
@@ -123,16 +129,14 @@ export default function AdminDashboard({ user, setUser }) {
         });
       }
 
-      const questions = rawQuestions.map((item) => {
-        return {
-          details: {
-            keyword: item.q,
-            options: item.options
-          },
-          type: 'MULTIPLE_CHOICE',
-          correctAnswer: item.a
-        };
-      });
+      const questions = rawQuestions.map((item) => ({
+        details: {
+          keyword: item.q,
+          options: item.options
+        },
+        type: 'MULTIPLE_CHOICE',
+        correctAnswer: item.a
+      }));
 
       const payload = {
         title: quizTitle.trim() !== '' ? quizTitle : (generationMode === 'ai' ? `AI Quiz: ${topic || 'General Knowledge'}` : `English Proficiency Test - ${numQuestions} Questions`),
@@ -144,17 +148,41 @@ export default function AdminDashboard({ user, setUser }) {
         questions
       };
 
-      await fetchApi('/quizzes', {
-        method: 'POST',
-        body: JSON.stringify(payload)
-      });
-
-      setMessage(`Successfully generated a quiz with ${numQuestions} questions!`);
+      // Show preview modal instead of saving immediately
+      setPreviewData({ payload, questions });
     } catch (err) {
       setMessage(`Error: ${err.message}`);
     } finally {
       setLoadingGen(false);
     }
+  };
+
+  /**
+   * Step 2: Admin clicked OK in preview modal → actually save the quiz.
+   */
+  const handleConfirmSave = async () => {
+    if (!previewData) return;
+    setSavingQuiz(true);
+    try {
+      await fetchApi('/quizzes', {
+        method: 'POST',
+        body: JSON.stringify(previewData.payload)
+      });
+      setPreviewData(null);
+      setMessage(`Successfully generated a quiz with ${previewData.questions.length} questions!`);
+    } catch (err) {
+      setMessage(`Error: ${err.message}`);
+      setPreviewData(null);
+    } finally {
+      setSavingQuiz(false);
+    }
+  };
+
+  /**
+   * Step 2 (cancel): Admin clicked Cancel in preview modal → discard.
+   */
+  const handleCancelPreview = () => {
+    setPreviewData(null);
   };
 
   const renderPaginationControls = (totalItems) => {
@@ -534,6 +562,129 @@ export default function AdminDashboard({ user, setUser }) {
                 })}
               </div>
             )}
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* ── AI Preview Modal ─────────────────────────────────────── */}
+      {previewData && (
+        <div style={{
+          position: 'fixed', top: 0, left: 0, right: 0, bottom: 0,
+          background: 'rgba(0,0,0,0.75)',
+          display: 'flex', alignItems: 'center', justifyContent: 'center',
+          zIndex: 200,
+          backdropFilter: 'blur(4px)'
+        }}>
+          <div className="glass-panel" style={{
+            width: 780, maxHeight: '88vh',
+            display: 'flex', flexDirection: 'column',
+            padding: 0,
+            border: '1px solid #7C3AED',
+            borderRadius: 16,
+            overflow: 'hidden',
+            boxShadow: '0 0 60px rgba(124,58,237,0.3)'
+          }}>
+            {/* Header */}
+            <div style={{
+              display: 'flex', justifyContent: 'space-between', alignItems: 'center',
+              padding: '20px 28px',
+              borderBottom: '1px solid rgba(255,255,255,0.08)',
+              background: 'rgba(124,58,237,0.12)'
+            }}>
+              <div>
+                <h2 style={{ margin: 0, color: '#a78bfa', fontSize: 20 }}>🔍 Preview Generated Questions</h2>
+                <p style={{ margin: '4px 0 0', color: 'var(--text-secondary)', fontSize: 13 }}>
+                  {previewData.questions.length} questions · <strong style={{ color: 'white' }}>{previewData.payload.title}</strong>
+                </p>
+              </div>
+              <button
+                onClick={handleCancelPreview}
+                style={{ background: 'transparent', border: 'none', color: 'rgba(255,255,255,0.5)', cursor: 'pointer', fontSize: 26, lineHeight: 1, padding: '0 4px' }}
+                title="Cancel"
+              >×</button>
+            </div>
+
+            {/* Question list */}
+            <div style={{ overflowY: 'auto', flex: 1, padding: '20px 28px' }}>
+              {previewData.questions.map((q, idx) => (
+                <div key={idx} style={{
+                  marginBottom: 18,
+                  padding: '16px 20px',
+                  borderRadius: 10,
+                  background: 'rgba(255,255,255,0.03)',
+                  border: '1px solid rgba(255,255,255,0.07)'
+                }}>
+                  <p style={{ margin: '0 0 12px', fontWeight: 600, fontSize: 14.5 }}>
+                    <span style={{ color: '#a78bfa', marginRight: 8 }}>Q{idx + 1}.</span>
+                    {q.details.keyword}
+                  </p>
+                  <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 8 }}>
+                    {q.details.options.map((opt, i) => {
+                      const isCorrect = opt === q.correctAnswer;
+                      return (
+                        <div key={i} style={{
+                          padding: '9px 14px',
+                          borderRadius: 7,
+                          fontSize: 13.5,
+                          background: isCorrect ? 'rgba(16,185,129,0.15)' : 'rgba(255,255,255,0.04)',
+                          border: isCorrect ? '1px solid rgba(16,185,129,0.6)' : '1px solid rgba(255,255,255,0.07)',
+                          color: isCorrect ? '#34d399' : 'rgba(255,255,255,0.75)',
+                          display: 'flex', alignItems: 'center', gap: 8
+                        }}>
+                          <span style={{
+                            width: 20, height: 20, borderRadius: '50%', flexShrink: 0,
+                            background: isCorrect ? '#10B981' : 'rgba(255,255,255,0.08)',
+                            display: 'flex', alignItems: 'center', justifyContent: 'center',
+                            fontSize: 11, fontWeight: 700, color: isCorrect ? 'white' : 'rgba(255,255,255,0.4)'
+                          }}>{String.fromCharCode(65 + i)}</span>
+                          {opt}
+                          {isCorrect && <CheckCircle size={13} style={{ marginLeft: 'auto', flexShrink: 0 }} />}
+                        </div>
+                      );
+                    })}
+                  </div>
+                </div>
+              ))}
+            </div>
+
+            {/* Footer actions */}
+            <div style={{
+              display: 'flex', justifyContent: 'flex-end', gap: 12,
+              padding: '16px 28px',
+              borderTop: '1px solid rgba(255,255,255,0.08)',
+              background: 'rgba(15,17,26,0.6)'
+            }}>
+              <button
+                onClick={handleCancelPreview}
+                disabled={savingQuiz}
+                style={{
+                  padding: '10px 24px', borderRadius: 8, fontSize: 14, fontWeight: 600,
+                  background: 'rgba(255,255,255,0.06)',
+                  border: '1px solid rgba(255,255,255,0.12)',
+                  color: 'rgba(255,255,255,0.75)', cursor: 'pointer',
+                  transition: 'all 0.2s'
+                }}
+                onMouseEnter={e => e.currentTarget.style.background = 'rgba(255,255,255,0.1)'}
+                onMouseLeave={e => e.currentTarget.style.background = 'rgba(255,255,255,0.06)'}
+              >
+                ✕ Cancel
+              </button>
+              <button
+                onClick={handleConfirmSave}
+                disabled={savingQuiz}
+                style={{
+                  padding: '10px 28px', borderRadius: 8, fontSize: 14, fontWeight: 600,
+                  background: savingQuiz ? 'rgba(124,58,237,0.5)' : 'linear-gradient(135deg, #7C3AED, #5B21B6)',
+                  border: 'none', color: 'white', cursor: savingQuiz ? 'not-allowed' : 'pointer',
+                  display: 'flex', alignItems: 'center', gap: 8,
+                  boxShadow: '0 4px 20px rgba(124,58,237,0.4)',
+                  transition: 'all 0.2s'
+                }}
+              >
+                {savingQuiz ? <Loader2 className="lucide-spin" size={16} /> : <CheckCircle size={16} />}
+                {savingQuiz ? 'Saving...' : 'OK – Save Quiz'}
+              </button>
             </div>
           </div>
         </div>
