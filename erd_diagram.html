@@ -1,0 +1,408 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sơ Đồ ERD Cơ Sở Dữ Liệu</title>
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;600;700;800&family=Plus+Jakarta+Sans:wght@600;700;800&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg-page: #0f172a;
+            --card-header: #1e293b;
+            --card-body: #090d16;
+            --border-color: #334155;
+            --text-title: #ffffff;
+            --text-col: #f1f5f9;
+            --text-type: #67e8f9;
+            
+            --pk: #f59e0b;
+            --fk: #38bdf8;
+            --uk: #34d399;
+
+            --line-11: #c084fc;
+            --line-1n: #38bdf8;
+            --line-nn: #f472b6;
+            --line-gold: #fbbf24;
+        }
+
+        body.light-theme {
+            --bg-page: #f8fafc;
+            --card-header: #e2e8f0;
+            --card-body: #ffffff;
+            --border-color: #cbd5e1;
+            --text-title: #0f172a;
+            --text-col: #1e293b;
+            --text-type: #0284c7;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            background-color: var(--bg-page);
+            color: var(--text-col);
+            min-height: 100vh;
+            padding: 12px 24px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            transition: background 0.2s ease;
+        }
+
+        .top-nav {
+            width: 100%;
+            max-width: 1200px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 8px;
+        }
+
+        .top-nav h1 {
+            font-size: 1.05rem;
+            font-weight: 800;
+            letter-spacing: -0.01em;
+            color: var(--text-title);
+        }
+
+        .theme-btn {
+            background: rgba(255, 255, 255, 0.08);
+            border: 1px solid var(--border-color);
+            color: var(--text-title);
+            font-size: 0.75rem;
+            font-weight: 600;
+            padding: 4px 10px;
+            border-radius: 6px;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .theme-btn:hover {
+            background: rgba(255, 255, 255, 0.16);
+        }
+
+        .svg-container {
+            width: 100%;
+            max-width: 1200px;
+            height: auto;
+            max-height: 88vh;
+            aspect-ratio: 1200 / 640;
+        }
+
+        svg {
+            width: 100%;
+            height: 100%;
+            display: block;
+        }
+
+        .tbl-header-bg {
+            fill: var(--card-header);
+        }
+        .tbl-body-bg {
+            fill: var(--card-body);
+            stroke: var(--border-color);
+            stroke-width: 1.5;
+        }
+        .tbl-title {
+            font-family: 'JetBrains Mono', monospace;
+            font-weight: 800;
+            font-size: 13px;
+            fill: var(--text-title);
+            letter-spacing: 0.05em;
+        }
+        .col-name {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 11.5px;
+            font-weight: 600;
+            fill: var(--text-col);
+        }
+        .col-type {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 10.5px;
+            fill: var(--text-type);
+        }
+        .badge-text {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 9.5px;
+            font-weight: 800;
+        }
+        .cardinality {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 13px;
+            font-weight: 800;
+            text-anchor: middle;
+            dominant-baseline: central;
+        }
+        .mid-label-text {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 10.5px;
+            font-weight: 800;
+            fill: #ffffff;
+            text-anchor: middle;
+            dominant-baseline: central;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="top-nav">
+        <h1>SƠ ĐỒ THỰC THỂ ERD (CÁC QUAN HỆ 1-1, 1-N, N-N)</h1>
+        <button class="theme-btn" onclick="toggleTheme()">☀️ / 🌙 Đổi Giao Diện</button>
+    </div>
+
+    <div class="svg-container">
+        <svg viewBox="0 0 1200 640" xmlns="http://www.w3.org/2000/svg">
+            <defs>
+                <filter id="shadow" x="-10%" y="-10%" width="120%" height="120%">
+                    <feDropShadow dx="0" dy="2" stdDeviation="3" flood-opacity="0.3"/>
+                </filter>
+            </defs>
+
+            <!-- ========================================== -->
+            <!-- 1. CÁC ĐƯỜNG NỐI VÀ CHÚ THÍCH 1, N, 1-N... -->
+            <!-- ========================================== -->
+
+            <!-- ĐƯỜNG 1: USERS (1) ── (N) NOTIFICATIONS [Quan hệ 1 - n] -->
+            <g id="rel-user-notif">
+                <line x1="465" y1="150" x2="350" y2="150" stroke="var(--line-1n)" stroke-width="2.5" />
+                <circle cx="465" cy="150" r="4" fill="var(--line-1n)"/>
+                <circle cx="350" cy="150" r="4" fill="var(--line-1n)"/>
+                <rect x="445" y="132" width="18" height="18" rx="4" fill="#090d16" stroke="var(--line-1n)" stroke-width="1.2"/>
+                <text x="454" y="141" class="cardinality" fill="var(--line-1n)">1</text>
+                <rect x="352" y="132" width="18" height="18" rx="4" fill="#090d16" stroke="var(--line-1n)" stroke-width="1.2"/>
+                <text x="361" y="141" class="cardinality" fill="var(--line-1n)">n</text>
+                <rect x="382" y="138" width="50" height="24" rx="5" fill="#0369a1" stroke="var(--line-1n)" stroke-width="1.5" filter="url(#shadow)"/>
+                <text x="407" y="150" class="mid-label-text">1 — n</text>
+            </g>
+
+            <!-- ĐƯỜNG 2: QUIZZES (1) ── (N) QUESTIONS [Quan hệ 1 - n] -->
+            <g id="rel-quiz-question">
+                <line x1="465" y1="470" x2="350" y2="470" stroke="var(--line-1n)" stroke-width="2.5" />
+                <circle cx="465" cy="470" r="4" fill="var(--line-1n)"/>
+                <circle cx="350" cy="470" r="4" fill="var(--line-1n)"/>
+                <rect x="445" y="452" width="18" height="18" rx="4" fill="#090d16" stroke="var(--line-1n)" stroke-width="1.2"/>
+                <text x="454" y="461" class="cardinality" fill="var(--line-1n)">1</text>
+                <rect x="352" y="452" width="18" height="18" rx="4" fill="#090d16" stroke="var(--line-1n)" stroke-width="1.2"/>
+                <text x="361" y="461" class="cardinality" fill="var(--line-1n)">n</text>
+                <rect x="382" y="458" width="50" height="24" rx="5" fill="#0369a1" stroke="var(--line-1n)" stroke-width="1.5" filter="url(#shadow)"/>
+                <text x="407" y="470" class="mid-label-text">1 — n</text>
+            </g>
+
+            <!-- ĐƯỜNG 3: QUIZZES (1) ── (N) EXAM_RESULTS [Quan hệ 1 - n] -->
+            <g id="rel-quiz-results">
+                <line x1="735" y1="470" x2="850" y2="470" stroke="var(--line-gold)" stroke-width="2.5" />
+                <circle cx="735" cy="470" r="4" fill="var(--line-gold)"/>
+                <circle cx="850" cy="470" r="4" fill="var(--line-gold)"/>
+                <rect x="745" y="452" width="18" height="18" rx="4" fill="#090d16" stroke="var(--line-gold)" stroke-width="1.2"/>
+                <text x="754" y="461" class="cardinality" fill="var(--line-gold)">1</text>
+                <rect x="822" y="452" width="18" height="18" rx="4" fill="#090d16" stroke="var(--line-gold)" stroke-width="1.2"/>
+                <text x="831" y="461" class="cardinality" fill="var(--line-gold)">n</text>
+                <rect x="767" y="458" width="50" height="24" rx="5" fill="#854d0e" stroke="var(--line-gold)" stroke-width="1.5" filter="url(#shadow)"/>
+                <text x="792" y="470" class="mid-label-text">1 — n</text>
+            </g>
+
+            <!-- ĐƯỜNG 4: USERS (1) ── (N) EXAM_RESULTS [Quan hệ n - n qua EXAM_RESULTS] -->
+            <g id="rel-users-results">
+                <path d="M 600 250 C 600 310, 985 300, 985 370" fill="none" stroke="var(--line-nn)" stroke-width="2.5" stroke-dasharray="6,4"/>
+                <circle cx="600" cy="250" r="4" fill="var(--line-nn)"/>
+                <circle cx="985" cy="370" r="4" fill="var(--line-nn)"/>
+                <rect x="591" y="258" width="18" height="18" rx="4" fill="#090d16" stroke="var(--line-nn)" stroke-width="1.2"/>
+                <text x="600" y="267" class="cardinality" fill="var(--line-nn)">1</text>
+                <rect x="976" y="344" width="18" height="18" rx="4" fill="#090d16" stroke="var(--line-nn)" stroke-width="1.2"/>
+                <text x="985" y="353" class="cardinality" fill="var(--line-nn)">n</text>
+                <rect x="740" y="293" width="105" height="24" rx="5" fill="#9f1239" stroke="var(--line-nn)" stroke-width="1.5" filter="url(#shadow)"/>
+                <text x="792.5" y="305" class="mid-label-text">n — n Bridge</text>
+            </g>
+
+            <!-- ========================================== -->
+            <!-- 2. CÁC BẢNG THỰC TẾ (DATABASE TABLES)       -->
+            <!-- ========================================== -->
+
+            <!-- BẢNG 1: NOTIFICATIONS (X: 80, Y: 50) -->
+            <g transform="translate(80, 50)" filter="url(#shadow)">
+                <rect width="270" height="200" rx="8" class="tbl-body-bg"/>
+                <path d="M 0 8 Q 0 0 8 0 L 262 0 Q 270 0 270 8 L 270 34 L 0 34 Z" class="tbl-header-bg"/>
+                <text x="14" y="22" class="tbl-title">NOTIFICATIONS</text>
+                <g transform="translate(14, 56)">
+                    <rect x="0" y="-10" width="22" height="14" rx="3" fill="rgba(245,158,11,0.2)"/>
+                    <text x="3" y="1" class="badge-text" fill="var(--pk)">PK</text>
+                    <text x="28" y="1" class="col-name">id</text>
+                    <text x="190" y="1" class="col-type">BIGINT</text>
+
+                    <rect x="0" y="19" width="22" height="14" rx="3" fill="rgba(56,189,248,0.2)"/>
+                    <text x="3" y="30" class="badge-text" fill="var(--fk)">FK</text>
+                    <text x="28" y="30" class="col-name">user_id</text>
+                    <text x="190" y="30" class="col-type">BIGINT</text>
+
+                    <text x="0" y="59" class="col-name">message</text>
+                    <text x="190" y="59" class="col-type">VARCHAR</text>
+
+                    <text x="0" y="88" class="col-name">is_read</text>
+                    <text x="190" y="88" class="col-type">BOOLEAN</text>
+
+                    <text x="0" y="117" class="col-name">created_at</text>
+                    <text x="190" y="117" class="col-type">TIMESTAMP</text>
+                </g>
+            </g>
+
+            <!-- BẢNG 2: USERS (X: 465, Y: 50) -->
+            <g transform="translate(465, 50)" filter="url(#shadow)">
+                <rect width="270" height="200" rx="8" class="tbl-body-bg"/>
+                <path d="M 0 8 Q 0 0 8 0 L 262 0 Q 270 0 270 8 L 270 34 L 0 34 Z" class="tbl-header-bg"/>
+                <text x="14" y="22" class="tbl-title">USERS</text>
+                <g transform="translate(14, 56)">
+                    <rect x="0" y="-10" width="22" height="14" rx="3" fill="rgba(245,158,11,0.2)"/>
+                    <text x="3" y="1" class="badge-text" fill="var(--pk)">PK</text>
+                    <text x="28" y="1" class="col-name">id</text>
+                    <text x="190" y="1" class="col-type">BIGINT</text>
+
+                    <rect x="0" y="19" width="22" height="14" rx="3" fill="rgba(52,211,153,0.2)"/>
+                    <text x="3" y="30" class="badge-text" fill="var(--uk)">UK</text>
+                    <text x="28" y="30" class="col-name">username</text>
+                    <text x="190" y="30" class="col-type">VARCHAR</text>
+
+                    <text x="0" y="59" class="col-name">password</text>
+                    <text x="190" y="59" class="col-type">VARCHAR</text>
+
+                    <text x="0" y="88" class="col-name">role</text>
+                    <text x="190" y="88" class="col-type">VARCHAR</text>
+
+                    <text x="0" y="117" class="col-name">created_at</text>
+                    <text x="190" y="117" class="col-type">TIMESTAMP</text>
+                </g>
+            </g>
+
+            <!-- KHUNG 3: THÔNG TIN DATABASE & GHI CHÚ (X: 850, Y: 50) -->
+            <g transform="translate(850, 50)" filter="url(#shadow)">
+                <rect width="270" height="200" rx="8" class="tbl-body-bg" stroke="var(--fk)" stroke-dasharray="4,4" stroke-opacity="0.5"/>
+                <path d="M 0 8 Q 0 0 8 0 L 262 0 Q 270 0 270 8 L 270 34 L 0 34 Z" fill="rgba(56, 189, 248, 0.12)"/>
+                <text x="14" y="22" class="tbl-title" fill="var(--fk)">DATABASE CHUẨN DỰ ÁN</text>
+                <g transform="translate(14, 56)">
+                    <text x="0" y="0" class="col-name" fill="#94a3b8">Database:</text>
+                    <text x="110" y="0" class="col-type" font-weight="700">PostgreSQL</text>
+
+                    <text x="0" y="28" class="col-name" fill="#94a3b8">ORM Mapping:</text>
+                    <text x="110" y="28" class="col-type" font-weight="700">Spring Data JPA</text>
+
+                    <text x="0" y="56" class="col-name" fill="#94a3b8">Tổng thực thể:</text>
+                    <text x="110" y="56" class="col-type" font-weight="700">5 Bảng chuẩn</text>
+
+                    <text x="0" y="84" class="col-name" fill="#94a3b8">Quan hệ Users-Quiz:</text>
+                    <text x="172" y="84" class="col-type" font-weight="700">N - N (Bridge)</text>
+
+                    <g transform="translate(0, 106)">
+                        <rect x="0" y="-8" width="22" height="14" rx="3" fill="rgba(245,158,11,0.2)"/>
+                        <text x="3" y="3" class="badge-text" fill="var(--pk)">PK</text>
+                        <text x="28" y="3" class="col-name" font-size="10.5px">Khóa chính</text>
+
+                        <rect x="110" y="-8" width="22" height="14" rx="3" fill="rgba(56,189,248,0.2)"/>
+                        <text x="113" y="3" class="badge-text" fill="var(--fk)">FK</text>
+                        <text x="138" y="3" class="col-name" font-size="10.5px">Khóa ngoại</text>
+                    </g>
+                    <g transform="translate(0, 126)">
+                        <rect x="0" y="-8" width="22" height="14" rx="3" fill="rgba(52,211,153,0.2)"/>
+                        <text x="3" y="3" class="badge-text" fill="var(--uk)">UK</text>
+                        <text x="28" y="3" class="col-name" font-size="10.5px">Ràng buộc Unique</text>
+                    </g>
+                </g>
+            </g>
+
+            <!-- BẢNG 4: QUESTIONS (X: 80, Y: 370) -->
+            <g transform="translate(80, 370)" filter="url(#shadow)">
+                <rect width="270" height="200" rx="8" class="tbl-body-bg"/>
+                <path d="M 0 8 Q 0 0 8 0 L 262 0 Q 270 0 270 8 L 270 34 L 0 34 Z" class="tbl-header-bg"/>
+                <text x="14" y="22" class="tbl-title">QUESTIONS</text>
+                <g transform="translate(14, 56)">
+                    <rect x="0" y="-10" width="22" height="14" rx="3" fill="rgba(245,158,11,0.2)"/>
+                    <text x="3" y="1" class="badge-text" fill="var(--pk)">PK</text>
+                    <text x="28" y="1" class="col-name">id</text>
+                    <text x="190" y="1" class="col-type">BIGINT</text>
+
+                    <rect x="0" y="19" width="22" height="14" rx="3" fill="rgba(56,189,248,0.2)"/>
+                    <text x="3" y="30" class="badge-text" fill="var(--fk)">FK</text>
+                    <text x="28" y="30" class="col-name">quiz_id</text>
+                    <text x="190" y="30" class="col-type">BIGINT</text>
+
+                    <text x="0" y="59" class="col-name">type</text>
+                    <text x="190" y="59" class="col-type">VARCHAR</text>
+
+                    <text x="0" y="88" class="col-name">correct_answer</text>
+                    <text x="190" y="88" class="col-type">VARCHAR</text>
+
+                    <text x="0" y="117" class="col-name">details</text>
+                    <text x="190" y="117" class="col-type">JSONB</text>
+                </g>
+            </g>
+
+            <!-- BẢNG 5: QUIZZES (X: 465, Y: 370) -->
+            <g transform="translate(465, 370)" filter="url(#shadow)">
+                <rect width="270" height="200" rx="8" class="tbl-body-bg"/>
+                <path d="M 0 8 Q 0 0 8 0 L 262 0 Q 270 0 270 8 L 270 34 L 0 34 Z" class="tbl-header-bg"/>
+                <text x="14" y="22" class="tbl-title">QUIZZES</text>
+                <g transform="translate(14, 56)">
+                    <rect x="0" y="-10" width="22" height="14" rx="3" fill="rgba(245,158,11,0.2)"/>
+                    <text x="3" y="1" class="badge-text" fill="var(--pk)">PK</text>
+                    <text x="28" y="1" class="col-name">id</text>
+                    <text x="190" y="1" class="col-type">BIGINT</text>
+
+                    <text x="0" y="30" class="col-name">title</text>
+                    <text x="190" y="30" class="col-type">VARCHAR</text>
+
+                    <text x="0" y="59" class="col-name">time_limit</text>
+                    <text x="190" y="59" class="col-type">INT</text>
+
+                    <text x="0" y="88" class="col-name">is_active</text>
+                    <text x="190" y="88" class="col-type">BOOLEAN</text>
+
+                    <text x="0" y="117" class="col-name">created_at</text>
+                    <text x="190" y="117" class="col-type">TIMESTAMP</text>
+                </g>
+            </g>
+
+            <!-- BẢNG 6: EXAM_RESULTS (X: 850, Y: 370) -->
+            <g transform="translate(850, 370)" filter="url(#shadow)">
+                <rect width="270" height="200" rx="8" class="tbl-body-bg"/>
+                <path d="M 0 8 Q 0 0 8 0 L 262 0 Q 270 0 270 8 L 270 34 L 0 34 Z" class="tbl-header-bg"/>
+                <text x="14" y="22" class="tbl-title">EXAM_RESULTS</text>
+                <g transform="translate(14, 56)">
+                    <rect x="0" y="-10" width="22" height="14" rx="3" fill="rgba(245,158,11,0.2)"/>
+                    <text x="3" y="1" class="badge-text" fill="var(--pk)">PK</text>
+                    <text x="28" y="1" class="col-name">id</text>
+                    <text x="190" y="1" class="col-type">BIGINT</text>
+
+                    <rect x="0" y="19" width="22" height="14" rx="3" fill="rgba(56,189,248,0.2)"/>
+                    <text x="3" y="30" class="badge-text" fill="var(--fk)">FK</text>
+                    <text x="28" y="30" class="col-name">user_id</text>
+                    <text x="190" y="30" class="col-type">BIGINT</text>
+
+                    <rect x="0" y="48" width="22" height="14" rx="3" fill="rgba(56,189,248,0.2)"/>
+                    <text x="3" y="59" class="badge-text" fill="var(--fk)">FK</text>
+                    <text x="28" y="59" class="col-name">quiz_id</text>
+                    <text x="190" y="59" class="col-type">BIGINT</text>
+
+                    <text x="0" y="88" class="col-name">score</text>
+                    <text x="190" y="88" class="col-type">INT</text>
+
+                    <text x="0" y="117" class="col-name">submitted_at</text>
+                    <text x="190" y="117" class="col-type">TIMESTAMP</text>
+                </g>
+            </g>
+
+        </svg>
+    </div>
+
+    <script>
+        function toggleTheme() {
+            document.body.classList.toggle('light-theme');
+        }
+    </script>
+</body>
+</html>
