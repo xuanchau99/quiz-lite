@@ -498,6 +498,7 @@
                     <div class="card">
                         <i class="fa-brands fa-java" style="color: #f87171;"></i>
                         <h4 style="color: white !important;">Spring Boot 3</h4>
+                        <p>Build Tool: Gradle, Java 17</p>
                         <p>REST API & Security</p>
                     </div>
                     <div class="card">
@@ -611,7 +612,7 @@
 
             <!-- SLIDE 5: JAVA ARCHITECTURE -->
             <section>
-                <h2 class="slide-title">4. Luồng Xử Lý Code Java</h2>
+                <h2 class="slide-title">4. Design Pattern</h2>
 
                 <!-- Sơ đồ luồng Forward: Client -> Controller -> Service -> Repository -> Database -->
                 <div class="java-arch-container">
@@ -621,7 +622,7 @@
                             style="border-color: #38bdf8; color: #38bdf8; box-shadow: 0 0 20px rgba(56, 189, 248, 0.25);">
                             <i class="fa-solid fa-desktop"></i>
                         </div>
-                        <h5>Client</h5>
+                        <h5>Client (View)</h5>
                         <p>Web / React</p>
                     </div>
 
@@ -772,7 +773,7 @@
                             <text x="361" y="141" class="cardinality" fill="#38bdf8">n</text>
                             <rect x="382" y="138" width="50" height="24" rx="5" fill="#0369a1" stroke="#38bdf8"
                                 stroke-width="1.5" filter="url(#shadow-erd)" />
-                            <text x="407" y="150" class="mid-label-text">1 — n</text>
+                            <text x="407" y="150" class="mid-label-text">n — 1</text>
                         </g>
 
                         <!-- ĐƯỜNG 2: QUIZZES (1) ── (N) QUESTIONS [Quan hệ 1 - n] -->
@@ -788,7 +789,7 @@
                             <text x="361" y="461" class="cardinality" fill="#38bdf8">n</text>
                             <rect x="382" y="458" width="50" height="24" rx="5" fill="#0369a1" stroke="#38bdf8"
                                 stroke-width="1.5" filter="url(#shadow-erd)" />
-                            <text x="407" y="470" class="mid-label-text">1 — n</text>
+                            <text x="407" y="470" class="mid-label-text">n — 1</text>
                         </g>
 
                         <!-- ĐƯỜNG 3: QUIZZES (1) ── (N) EXAM_RESULTS [Quan hệ 1 - n] -->
@@ -821,7 +822,7 @@
                             <text x="985" y="353" class="cardinality" fill="#f472b6">n</text>
                             <rect x="740" y="293" width="105" height="24" rx="5" fill="#9f1239" stroke="#f472b6"
                                 stroke-width="1.5" filter="url(#shadow-erd)" />
-                            <text x="792.5" y="305" class="mid-label-text">n — n Bridge</text>
+                            <text x="792.5" y="305" class="mid-label-text">1 - n</text>
                         </g>
 
                         <!-- ========================================== -->

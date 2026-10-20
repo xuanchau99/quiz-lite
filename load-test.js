@@ -4,7 +4,7 @@
 const API_URL = 'http://localhost:8080/api/v1';
 const ADMIN_USERNAME = 'admin';
 const ADMIN_PASSWORD = 'password';
-const QUIZ_ID = 5; // Thay đổi ID bài quiz bạn muốn test
+const QUIZ_ID = 3; // Thay đổi ID bài quiz bạn muốn test
 const CONCURRENT_USERS = 200; // Số lượng User (request) nộp bài cùng lúc
 
 async function runLoadTest() {
