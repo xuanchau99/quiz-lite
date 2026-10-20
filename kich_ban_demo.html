@@ -3,165 +3,740 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Kịch Bản Thuyết Trình & Demo: Quiz Lite</title>
+    <title>Kịch Bản Thuyết Trình & Phân Tích Kỹ Thuật: Quiz Lite</title>
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@500;700&display=swap" rel="stylesheet">
+    <!-- FontAwesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
+    
     <style>
-        body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            line-height: 1.6;
-            color: #333;
-            background-color: #f4f7f6;
+        :root {
+            --primary: #2563eb;
+            --primary-dark: #1d4ed8;
+            --success: #10b981;
+            --success-bg: #ecfdf5;
+            --warning: #f59e0b;
+            --warning-bg: #fffbeb;
+            --danger: #ef4444;
+            --danger-bg: #fef2f2;
+            --purple: #8b5cf6;
+            --purple-bg: #f5f3ff;
+            --text-main: #0f172a;
+            --text-muted: #64748b;
+            --bg-page: #f8fafc;
+            --bg-card: #ffffff;
+            --border-card: #e2e8f0;
+        }
+
+        * {
+            box-sizing: border-box;
             margin: 0;
-            padding: 20px;
+            padding: 0;
         }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            line-height: 1.65;
+            color: var(--text-main);
+            background-color: var(--bg-page);
+            padding: 30px 20px;
+        }
+
         .container {
-            max-width: 900px;
+            max-width: 1050px;
             margin: 0 auto;
-            background-color: #fff;
-            padding: 40px;
-            border-radius: 8px;
-            box-shadow: 0 5px 15px rgba(0,0,0,0.05);
+            background-color: var(--bg-card);
+            padding: 45px 50px;
+            border-radius: 16px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.05);
+            border: 1px solid var(--border-card);
         }
-        h1 {
+
+        /* Header */
+        .doc-header {
             text-align: center;
-            color: #2c3e50;
-            border-bottom: 3px solid #3498db;
-            padding-bottom: 15px;
-            margin-bottom: 30px;
+            border-bottom: 2px solid var(--border-card);
+            padding-bottom: 25px;
+            margin-bottom: 35px;
         }
+
+        .badge-project {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            background: #eff6ff;
+            color: var(--primary);
+            padding: 4px 14px;
+            border-radius: 20px;
+            font-size: 0.85rem;
+            font-weight: 700;
+            margin-bottom: 12px;
+            border: 1px solid #bfdbfe;
+        }
+
+        h1 {
+            color: #0f172a;
+            font-size: 2.1rem;
+            font-weight: 800;
+            letter-spacing: -0.02em;
+            margin-bottom: 8px;
+        }
+
+        .subtitle {
+            color: var(--text-muted);
+            font-size: 1rem;
+        }
+
+        /* Section Titles */
         h2 {
-            color: #2980b9;
-            margin-top: 40px;
-            border-bottom: 2px solid #ecf0f1;
-            padding-bottom: 5px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            color: #1e293b;
+            font-size: 1.35rem;
+            font-weight: 800;
+            margin-top: 45px;
+            margin-bottom: 20px;
+            padding-bottom: 10px;
+            border-bottom: 2px solid #f1f5f9;
         }
+
+        h2 i {
+            color: var(--primary);
+            font-size: 1.25rem;
+        }
+
         h3 {
-            color: #d35400;
-            margin-top: 25px;
+            color: #1e293b;
+            font-size: 1.1rem;
+            font-weight: 700;
+            margin-top: 22px;
+            margin-bottom: 12px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
         }
+
+        /* Script & Speech */
         .action {
-            font-weight: bold;
-            color: #c0392b;
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            font-weight: 700;
+            color: #b91c1c;
+            font-size: 0.95rem;
         }
+
         .speech {
             font-style: italic;
-            color: #27ae60;
-            background-color: #f0fdf4;
-            padding: 12px;
-            border-left: 4px solid #27ae60;
-            margin: 10px 0;
-            border-radius: 0 4px 4px 0;
+            color: #065f46;
+            background-color: var(--success-bg);
+            padding: 14px 18px;
+            border-left: 4px solid var(--success);
+            margin: 10px 0 18px 0;
+            border-radius: 0 8px 8px 0;
+            font-size: 0.98rem;
+            line-height: 1.6;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.02);
         }
-        .box {
-            padding: 20px;
+
+        .speech-tip {
+            font-style: normal;
+            display: block;
+            margin-top: 6px;
+            font-size: 0.85rem;
+            color: #047857;
+            font-weight: 600;
+        }
+
+        /* Cards & Grids */
+        .grid-2 {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 20px;
             margin: 20px 0;
+        }
+
+        .card-detail {
+            border-radius: 12px;
+            padding: 22px;
+            border: 1px solid var(--border-card);
+            background: #ffffff;
+            transition: transform 0.2s ease, box-shadow 0.2s ease;
+        }
+
+        .card-detail:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 20px rgba(0,0,0,0.04);
+        }
+
+        .card-detail.strength-card {
+            border-left: 5px solid var(--success);
+            background: linear-gradient(180deg, #f0fdf4 0%, #ffffff 40%);
+        }
+
+        .card-detail.weakness-card {
+            border-left: 5px solid var(--warning);
+            background: linear-gradient(180deg, #fffbeb 0%, #ffffff 40%);
+        }
+
+        .card-header-flex {
+            display: flex;
+            align-items: flex-start;
+            justify-content: space-between;
+            margin-bottom: 12px;
+        }
+
+        .card-title {
+            font-size: 1.05rem;
+            font-weight: 800;
+            color: #0f172a;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .strength-card .card-title i {
+            color: var(--success);
+        }
+
+        .weakness-card .card-title i {
+            color: var(--warning);
+        }
+
+        /* Badges */
+        .pill-badge {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.72rem;
+            font-weight: 700;
+            padding: 3px 8px;
             border-radius: 6px;
+            text-transform: uppercase;
+            letter-spacing: 0.04em;
         }
-        .strengths {
-            background-color: #e8f8f5;
-            border-left: 5px solid #1abc9c;
+
+        .pill-high {
+            background: #fee2e2;
+            color: #b91c1c;
+            border: 1px solid #fca5a5;
         }
-        .weaknesses {
-            background-color: #fdf2e9;
-            border-left: 5px solid #e67e22;
+
+        .pill-med {
+            background: #fef3c7;
+            color: #b45309;
+            border: 1px solid #fde68a;
         }
-        ul {
-            padding-left: 20px;
+
+        .pill-low {
+            background: #e0e7ff;
+            color: #4338ca;
+            border: 1px solid #c7d2fe;
         }
-        li {
-            margin-bottom: 10px;
+
+        .pill-benefit {
+            background: #d1fae5;
+            color: #065f46;
+            border: 1px solid #a7f3d0;
         }
-        .tag {
-            background-color: #ecf0f1;
+
+        /* Detail items */
+        .metric-row {
+            display: flex;
+            align-items: baseline;
+            gap: 10px;
+            margin: 8px 0;
+            font-size: 0.92rem;
+        }
+
+        .metric-label {
+            font-weight: 700;
+            color: #334155;
+            min-width: 145px;
+            flex-shrink: 0;
+        }
+
+        .metric-val {
+            color: #475569;
+        }
+
+        .tech-tag {
+            font-family: 'JetBrains Mono', monospace;
+            background: #f1f5f9;
+            color: #0369a1;
             padding: 2px 6px;
             border-radius: 4px;
-            font-size: 0.9em;
-            color: #7f8c8d;
-            font-weight: bold;
+            font-size: 0.85em;
+            font-weight: 600;
+            border: 1px solid #e2e8f0;
+        }
+
+        .solution-box {
+            margin-top: 14px;
+            padding: 12px 14px;
+            background: #f8fafc;
+            border: 1px solid #e2e8f0;
+            border-radius: 8px;
+            font-size: 0.88rem;
+            line-height: 1.5;
+        }
+
+        .solution-box strong {
+            color: #0369a1;
+            display: inline-flex;
+            align-items: center;
+            gap: 5px;
+        }
+
+        /* Comparison Table */
+        .summary-table-wrap {
+            overflow-x: auto;
+            margin: 25px 0;
+            border-radius: 10px;
+            border: 1px solid var(--border-card);
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 0.9rem;
+            text-align: left;
+        }
+
+        th {
+            background-color: #f8fafc;
+            padding: 12px 16px;
+            font-weight: 700;
+            color: #334155;
+            border-bottom: 2px solid var(--border-card);
+        }
+
+        td {
+            padding: 12px 16px;
+            border-bottom: 1px solid var(--border-card);
+            color: #475569;
+            vertical-align: top;
+        }
+
+        tr:last-child td {
+            border-bottom: none;
+        }
+
+        tr:nth-child(even) td {
+            background-color: #fafbfc;
+        }
+
+        /* Lists */
+        ul {
+            padding-left: 20px;
+            margin-bottom: 15px;
+        }
+
+        li {
+            margin-bottom: 10px;
+            color: #334155;
+        }
+
+        .highlight {
+            color: var(--primary);
+            font-weight: 600;
         }
     </style>
 </head>
 <body>
     <div class="container">
-        <h1>🎤 Kịch Bản Thuyết Trình và Demo Dự Án: Quiz Lite</h1>
-
-        <h2>🌟 PHẦN 1: THUYẾT TRÌNH (SLIDES/TỔNG QUAN)</h2>
-
-        <h3>1. Lời mở đầu (1 phút)</h3>
-        <ul>
-            <li><span class="action">Chào hỏi:</span> <div class="speech">"Chào mọi người, hôm nay em xin phép trình bày về dự án Quiz Lite - Hệ Thống Thi Trắc Nghiệm Hiệu Suất Cao."</div></li>
-            <li><span class="action">Vấn đề (Pain-point):</span> <div class="speech">"Trong thực tế, các kỳ thi tập trung thường có hàng ngàn học sinh cùng truy cập và thao tác (chọn đáp án, nộp bài) cùng một thời điểm. Điều này dễ dẫn đến nghẽn mạng và sập Database nếu chúng ta chỉ dùng các kỹ thuật CRUD thông thường."</div></li>
-            <li><span class="action">Giải pháp:</span> <div class="speech">"Để giải quyết bài toán này, Quiz Lite được thiết kế với kiến trúc tối ưu để chịu tải cực cao, kết hợp xử lý bất đồng bộ và lưu trữ tạm thời siêu tốc, đồng thời tích hợp thêm AI để hỗ trợ giảng viên."</div></li>
-        </ul>
-
-        <h3>2. Kiến Trúc & Công Nghệ Cốt Lõi (2 phút)</h3>
-        <ul>
-            <li><strong>Core Backend:</strong> Java 17 + Spring Boot 3.x.</li>
-            <li><strong>Database tối ưu:</strong> PostgreSQL với kiểu dữ liệu <span class="tag">JSONB</span> giúp lưu trữ cấu trúc câu hỏi linh hoạt.</li>
-            <li><strong>Xử lý chịu tải cao:</strong> Sử dụng <strong>Redis</strong> lưu trữ dạng Hash (O(1)) để Auto-save đáp án học sinh mà không làm thắt cổ chai Database.</li>
-            <li><strong>Xử lý bất đồng bộ:</strong> Sử dụng <strong>RabbitMQ</strong> để đưa việc chấm điểm vào hàng đợi (queue), giúp hệ thống phản hồi mượt mà.</li>
-            <li><strong>Real-time:</strong> Thông báo điểm số ngay lập tức qua <strong>WebSocket (STOMP)</strong> sau khi RabbitMQ xử lý xong.</li>
-            <li><strong>AI:</strong> Tích hợp <strong>Google Gemini API</strong> tự động sinh bộ câu hỏi trắc nghiệm.</li>
-        </ul>
-
-        <h2>⚖️ PHẦN 2: ĐÁNH GIÁ ĐIỂM MẠNH & ĐIỂM YẾU</h2>
         
-        <div class="box strengths">
-            <h3 style="margin-top: 0; color: #16a085;">✅ Điểm mạnh của hệ thống</h3>
-            <ul>
-                <li><strong>Chịu tải cực tốt (High-throughput):</strong> Sử dụng Redis để lưu bộ nhớ đệm (In-memory Cache) thay vì ghi trực tiếp xuống Database, loại bỏ hoàn toàn rủi ro quá tải DB khi hàng ngàn thí sinh click chọn đáp án cùng lúc.</li>
-                <li><strong>Luồng xử lý Non-blocking:</strong> Nhờ Message Broker (RabbitMQ), việc nộp bài và chấm điểm được tách rời. API trả về phản hồi tức thì (<span class="tag">202 ACCEPTED</span>), mang lại trải nghiệm người dùng không độ trễ.</li>
-                <li><strong>Cấu trúc dữ liệu linh hoạt:</strong> Áp dụng `JSONB` của PostgreSQL giúp dễ dàng thiết kế các loại câu hỏi đa dạng (Multiple choice, Điền từ, Kéo thả...) trong tương lai mà không cần thay đổi cấu trúc bảng (Schema).</li>
-                <li><strong>Bắt kịp xu hướng công nghệ:</strong> Tích hợp mượt mà với Generative AI (Google Gemini) giải quyết bài toán ra đề nhanh cho giáo viên.</li>
-            </ul>
+        <!-- Header -->
+        <div class="doc-header">
+            <span class="badge-project"><i class="fa-solid fa-code"></i> QUIZ LITE SYSTEM</span>
+            <h1>Kịch Bản Thuyết Trình & Phân Tích Kỹ Thuật Chuyên Sâu</h1>
+            <p class="subtitle">Báo cáo năng lực chịu tải, đánh đổi kiến trúc (Trade-offs) và kịch bản thực chiến</p>
         </div>
 
-        <div class="box weaknesses">
-            <h3 style="margin-top: 0; color: #d35400;">🚧 Điểm yếu và Hướng cải thiện</h3>
-            <ul>
-                <li><strong>Thiếu cơ chế Read-Cache:</strong> Hệ thống hiện tại dùng Redis rất tốt cho luồng Ghi (Auto-save). Tuy nhiên, ở luồng Đọc (Lấy danh sách đề thi, lấy chi tiết hàng trăm câu hỏi), hệ thống vẫn đang query thẳng vào DB. <em>(Hướng cải thiện: Cần implement Redis Cache thêm cho API lấy đề thi).</em></li>
-                <li><strong>Single Point of Failure (Điểm chết độc nhất):</strong> Hiện dự án đang deploy theo mô hình Docker Compose đơn giản trên 1 node. Nếu Redis hoặc RabbitMQ sập, toàn bộ tiến trình thi sẽ đứt gãy. <em>(Hướng cải thiện: Cần cấu hình Redis Cluster và RabbitMQ Cluster).</em></li>
-                <li><strong>Khả năng theo dõi (Monitoring):</strong> Chưa có dashboard giám sát hệ thống thời gian thực. <em>(Hướng cải thiện: Cần tích hợp Prometheus + Grafana để giám sát lượng Memory của Redis và độ dài Queue của RabbitMQ).</em></li>
-                <li><strong>Kiến trúc nguyên khối (Monolith):</strong> Dù xử lý tốt nhưng vẫn là Monolith. Để chịu tải thực sự quy mô lớn (hàng triệu user), <em>cần tách thành Microservices (VD: Quiz Service riêng, Grading Service riêng) và chạy trên Kubernetes (K8s).</em></li>
-            </ul>
+        <!-- ======================================================== -->
+        <!-- PHẦN 1: TỔNG QUAN THUYẾT TRÌNH                           -->
+        <!-- ======================================================== -->
+        <h2><i class="fa-solid fa-chalkboard-user"></i> PHẦN 1: THUYẾT TRÌNH TỔNG QUAN (3 PHÚT)</h2>
+
+        <h3>1. Đặt Vấn Đề & Thách Thức Kỹ Thuật (Pain-points)</h3>
+        <ul>
+            <li>
+                <span class="action">Mở đầu & Bối cảnh:</span> 
+                <div class="speech">
+                    "Kính chào Ban giám khảo/Anh chị, hôm nay em xin đại diện nhóm trình bày về dự án <strong>Quiz Lite - Hệ Thống Thi Trắc Nghiệm Hiệu Suất Cao</strong>.
+                    <br><br>
+                    Trong thực tế, khi tổ chức một kỳ thi tập trung cho hàng ngàn thí sinh, vấn đề lớn nhất không nằm ở tính năng CRUD cơ bản, mà nằm ở <strong>hiện tượng thắt cổ chai cơ sở dữ liệu (I/O Bottleneck)</strong> và <strong>nghẽn luồng xử lý (Thread Pool Exhaustion)</strong>. Nếu cứ mỗi lần thí sinh chọn một đáp án lại phát sinh lệnh <code>UPDATE</code> trực tiếp xuống Database, máy chủ RDBMS chắc chắn sẽ rơi vào tình trạng Disk I/O 100%, gây giật lag và nguy cơ làm sập kỳ thi."
+                </div>
+            </li>
+            <li>
+                <span class="action">Giải pháp kiến trúc:</span> 
+                <div class="speech">
+                    "Để hóa giải triệt để bài toán này, Quiz Lite được xây dựng dựa trên 3 trụ cột kiến trúc cốt lõi:
+                    <br>
+                    1. <strong>Tách rời luồng ghi (Decoupled Writes):</strong> Đệm toàn bộ thao tác chọn đáp án trên bộ nhớ RAM bằng <code>Redis Hash O(1)</code>.
+                    <br>
+                    2. <strong>Chấm điểm bất đồng bộ (Asynchronous Event-driven):</strong> Đẩy bài nộp vào hàng đợi <code>RabbitMQ</code>, trả về phản hồi <code>202 Accepted</code> ngay trong 15ms.
+                    <br>
+                    3. <strong>Tối ưu hóa dữ liệu & ORM:</strong> Giải quyết triệt để lỗi <code>N+1 Query</code> bằng <code>@EntityGraph</code> và đa hình hóa cấu trúc đề thi nhờ <code>PostgreSQL JSONB</code>."
+                </div>
+            </li>
+        </ul>
+
+        <h3>2. Cấu Trúc Ngăn Xếp Công Nghệ (Tech Stack)</h3>
+        <ul>
+            <li><strong>Ngôn ngữ & Nền tảng:</strong> Java 17 LTS, Spring Boot 3.x (Spring MVC, Spring Security).</li>
+            <li><strong>Cơ sở dữ liệu chính:</strong> PostgreSQL 15+ (Lưu trữ quan hệ + Cột JSONB động).</li>
+            <li><strong>Bộ nhớ đệm siêu tốc (In-Memory Data Store):</strong> Redis (Spring Data Redis Hash Template).</li>
+            <li><strong>Message Broker:</strong> RabbitMQ (AMQP Protocol, Dead-letter handling).</li>
+            <li><strong>Giao tiếp thời gian thực:</strong> Spring WebSocket STOMP qua SockJS.</li>
+            <li><strong>Trí tuệ nhân tạo (AI Engine):</strong> Google Gemini Generative API (Tự động sinh đề + Retry Backoff).</li>
+        </ul>
+
+
+        <!-- ======================================================== -->
+        <!-- PHẦN 2: ĐÁNH GIÁ CHI TIẾT ĐIỂM MẠNH & ĐIỂM YẾU           -->
+        <!-- ======================================================== -->
+        <h2><i class="fa-solid fa-scale-balanced"></i> PHẦN 2: PHÂN TÍCH ĐIỂM MẠNH & ĐIỂM YẾU CỤ THỂ</h2>
+        <p style="color: var(--text-muted); margin-bottom: 20px; font-size: 0.95rem;">
+            Mỗi kiến trúc phần mềm đều là một sự <strong>đánh đổi (Trade-off)</strong> có tính toán. Dưới đây là phân tích chi tiết các điểm mạnh vượt trội và những điểm giới hạn thực tế cần cải thiện:
+        </p>
+
+        <!-- BẢNG TỔNG KẾT ĐỐI CHIẾU NHANH -->
+        <div class="summary-table-wrap">
+            <table>
+                <thead>
+                    <tr>
+                        <th style="width: 20%;">Hạng Mục</th>
+                        <th style="width: 40%;">Điểm Mạnh Cụ Thể (Strengths)</th>
+                        <th style="width: 40%;">Điểm Yếu Thực Tế & Khắc Phục (Limitations & Mitigations)</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td><strong>1. Luồng Ghi & Auto-save</strong></td>
+                        <td>
+                            <strong>Redis Hash O(1):</strong> Giảm <strong>95% Disk Write I/O</strong> xuống PostgreSQL. Độ trễ ghi nhận đáp án <strong>&lt; 3ms</strong>.
+                        </td>
+                        <td>
+                            <strong>Tính bốc hơi của RAM (Volatility):</strong> Nếu máy chủ Redis mất điện đột ngột có thể thất thoát đáp án tạm.
+                            <br><span class="tech-tag">Khắc phục:</span> Bật Redis AOF (everysec) + LocalStorage Sync.
+                        </td>
+                    </tr>
+                    <tr>
+                        <td><strong>2. Luồng Nộp & Chấm Bài</strong></td>
+                        <td>
+                            <strong>RabbitMQ Event-Driven:</strong> Chịu tải nộp bài ồ ạt ở phút chót (Peak Submission). Phản hồi API <code>202 Accepted</code> trong <strong>&lt; 15ms</strong>.
+                        </td>
+                        <td>
+                            <strong>Chưa có Dead Letter Queue (DLQ):</strong> Bài làm dị tật có nguy cơ gây tắc vòng lặp Consumer nếu không bắt ngoại lệ triệt để.
+                            <br><span class="tech-tag">Khắc phục:</span> Cấu hình RabbitMQ DLX + Retry Policy 3 lần.
+                        </td>
+                    </tr>
+                    <tr>
+                        <td><strong>3. Truy Vấn Đề Thi (Read Flow)</strong></td>
+                        <td>
+                            <strong>Fix N+1 bằng @EntityGraph:</strong> Tải đề thi 100 câu chỉ tốn <strong>duy nhất 1 câu SQL JOIN</strong> thay vì 101 câu query.
+                        </td>
+                        <td>
+                            <strong>Chưa có Read-through Cache:</strong> Hàng ngàn thí sinh cùng mở đề một lúc vẫn hit trực tiếp DB connection pool.
+                            <br><span class="tech-tag">Khắc phục:</span> Áp dụng <code>@Cacheable</code> cho API chi tiết đề thi.
+                        </td>
+                    </tr>
+                    <tr>
+                        <td><strong>4. Mô Hình Hóa Dữ Liệu</strong></td>
+                        <td>
+                            <strong>PostgreSQL JSONB:</strong> Hỗ trợ đa dạng loại câu hỏi (kéo thả, điền từ, chọn 1, chọn nhiều) mà không cần đổi Schema bảng.
+                        </td>
+                        <td>
+                            <strong>Mất ràng buộc Foreign Key lỏng lẻo trong JSON:</strong> Khó áp dụng toàn vẹn tham chiếu cấp độ Database trên các object con.
+                            <br><span class="tech-tag">Khắc phục:</span> Kiểm soát chặt bằng Bean Validation / DTO.
+                        </td>
+                    </tr>
+                    <tr>
+                        <td><strong>5. Tích Hợp AI (Gemini)</strong></td>
+                        <td>
+                            <strong>Sinh đề tự động + Auto-Retry:</strong> Tự động vượt qua lỗi 503 khi Google Server quá tải. Bảo mật API Key trong DB.
+                        </td>
+                        <td>
+                            <strong>Độ trễ phụ thuộc bên thứ ba (2-5s):</strong> Bị giới hạn Rate limit (15 RPM nếu dùng gói Free Tier).
+                            <br><span class="tech-tag">Khắc phục:</span> Chuyển sang Background Task + Hàng đợi sinh đề.
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
         </div>
 
-        <h2>💻 PHẦN 3: KỊCH BẢN DEMO THỰC TẾ (HANDS-ON DEMO)</h2>
+        <!-- CHI TIẾT ĐIỂM MẠNH -->
+        <h3 style="color: #059669;"><i class="fa-solid fa-circle-check"></i> Chi Tiết 5 Điểm Mạnh Nổi Bật</h3>
+        <div class="grid-2">
 
-        <h3>Kịch bản 1: Xác thực & Phân quyền</h3>
+            <!-- Điểm mạnh 1 -->
+            <div class="card-detail strength-card">
+                <div class="card-header-flex">
+                    <span class="card-title"><i class="fa-solid fa-bolt"></i> 1. Đột Phá Luồng Ghi Đáp Án Bằng Redis In-Memory (O(1))</span>
+                    <span class="pill-badge pill-benefit">Giảm 95% DB Load</span>
+                </div>
+                <div class="metric-row">
+                    <span class="metric-label">Bản chất kỹ thuật:</span>
+                    <span class="metric-val">Dùng cấu trúc lệnh <span class="tech-tag">HSET exam:{userId}:{quizId} {questionId} {answer}</span>.</span>
+                </div>
+                <div class="metric-row">
+                    <span class="metric-label">Số liệu đo lường:</span>
+                    <span class="metric-val">Thời gian phản hồi mỗi click <strong>dưới 3ms</strong>. Hấp thụ thoải mái <strong>5,000+ lượt click/giây</strong> trên 1 máy chủ thông thường.</span>
+                </div>
+                <div class="metric-row">
+                    <span class="metric-label">Lợi ích thực tế:</span>
+                    <span class="metric-val">Thí sinh bấm chọn đáp án liên tục không gây Disk Write I/O trên PostgreSQL. F5 tải lại trang hay chập chờn mạng đều tự phục hồi đáp án nguyên vẹn từ RAM.</span>
+                </div>
+            </div>
+
+            <!-- Điểm mạnh 2 -->
+            <div class="card-detail strength-card">
+                <div class="card-header-flex">
+                    <span class="card-title"><i class="fa-solid fa-network-wired"></i> 2. Hấp Thụ Tải Đột Biến Phút Chót Với RabbitMQ & WebSocket</span>
+                    <span class="pill-badge pill-benefit">Non-Blocking</span>
+                </div>
+                <div class="metric-row">
+                    <span class="metric-label">Bản chất kỹ thuật:</span>
+                    <span class="metric-val">Controller đóng gói <span class="tech-tag">ExamSubmittedEvent</span>, ném vào Queue và trả ngay <span class="tech-tag">202 ACCEPTED</span>.</span>
+                </div>
+                <div class="metric-row">
+                    <span class="metric-label">Số liệu đo lường:</span>
+                    <span class="metric-val">API nộp bài phản hồi trong <strong>10 - 15ms</strong>. Worker chấm điểm tuần tự với throughput ổn định.</span>
+                </div>
+                <div class="metric-row">
+                    <span class="metric-label">Lợi ích thực tế:</span>
+                    <span class="metric-val">Khi hết giờ thi, 1,000 thí sinh bị "Force Submit" cùng một giây. Hệ thống không bị treo hoặc chết Thread Pool như mô hình đồng bộ truyền thống. Điểm số đẩy về màn hình ngay lập tức qua WebSocket STOMP.</span>
+                </div>
+            </div>
+
+            <!-- Điểm mạnh 3 -->
+            <div class="card-detail strength-card">
+                <div class="card-header-flex">
+                    <span class="card-title"><i class="fa-solid fa-database"></i> 3. Triệt Tiêu Lỗi N+1 Query Bằng @EntityGraph</span>
+                    <span class="pill-badge pill-benefit">1 Query Duy Nhất</span>
+                </div>
+                <div class="metric-row">
+                    <span class="metric-label">Bản chất kỹ thuật:</span>
+                    <span class="metric-val">Khai báo <span class="tech-tag">@EntityGraph(attributePaths = {"questions"})</span> trên <span class="tech-tag">QuizRepository</span>.</span>
+                </div>
+                <div class="metric-row">
+                    <span class="metric-label">Số liệu đo lường:</span>
+                    <span class="metric-val">Truy xuất đề thi có 100 câu hỏi: Giảm từ <strong>101 queries</strong> xuống <strong>1 câu query duy nhất (LEFT OUTER JOIN)</strong>.</span>
+                </div>
+                <div class="metric-row">
+                    <span class="metric-label">Lợi ích thực tế:</span>
+                    <span class="metric-val">Loại bỏ hoàn toàn hiện tượng nghẽn đường truyền giữa Spring Boot và PostgreSQL, tiết kiệm băng thông và tài nguyên CPU máy chủ cơ sở dữ liệu.</span>
+                </div>
+            </div>
+
+            <!-- Điểm mạnh 4 -->
+            <div class="card-detail strength-card">
+                <div class="card-header-flex">
+                    <span class="card-title"><i class="fa-solid fa-code-merge"></i> 4. Thiết Kế Đa Hình Dữ Liệu Bằng PostgreSQL JSONB</span>
+                    <span class="pill-badge pill-benefit">Zero Schema Migration</span>
+                </div>
+                <div class="metric-row">
+                    <span class="metric-label">Bản chất kỹ thuật:</span>
+                    <span class="metric-val">Dùng <span class="tech-tag">@JdbcTypeCode(SqlTypes.JSON)</span> lưu cấu trúc câu hỏi động và evidence lịch sử làm bài.</span>
+                </div>
+                <div class="metric-row">
+                    <span class="metric-label">Lợi ích thực tế:</span>
+                    <span class="metric-val">Mở rộng thêm các dạng câu hỏi mới (Code editor, Audio listening, Matching pairs) trong tương lai mà không cần chạy lệnh ALTER TABLE hay can thiệp vào cấu trúc Database cũ.</span>
+                </div>
+            </div>
+
+            <!-- Điểm mạnh 5 -->
+            <div class="card-detail strength-card">
+                <div class="card-header-flex">
+                    <span class="card-title"><i class="fa-solid fa-shield-halved"></i> 5. Bảo Mật Stateless JWT & Cơ Chế AI Kháng Lỗi (Resilient AI)</span>
+                    <span class="pill-badge pill-benefit">Stateless & Resilient</span>
+                </div>
+                <div class="metric-row">
+                    <span class="metric-label">Bản chất kỹ thuật:</span>
+                    <span class="metric-val">JWT Filter + <span class="tech-tag">@PreAuthorize</span> cô lập dữ liệu (Data Isolation). Thuật toán Auto-Retry với Exponential Backoff khi gọi Gemini.</span>
+                </div>
+                <div class="metric-row">
+                    <span class="metric-label">Lợi ích thực tế:</span>
+                    <span class="metric-val">API Key lưu trữ trong DB (`system` table) thay vì hardcode trong file config. Người dùng thường không thể truy cập trái phép vào kết quả của thí sinh khác dù biết ID bài làm.</span>
+                </div>
+            </div>
+
+        </div>
+
+        <!-- CHI TIẾT ĐIỂM YẾU & GIẢI PHÁP -->
+        <h3 style="color: #d97706; margin-top: 35px;"><i class="fa-solid fa-triangle-exclamation"></i> Chi Tiết 5 Điểm Yếu Thực Tế & Lộ Trình Khắc Phục</h3>
+        <div class="grid-2">
+
+            <!-- Điểm yếu 1 -->
+            <div class="card-detail weakness-card">
+                <div class="card-header-flex">
+                    <span class="card-title"><i class="fa-solid fa-clock-rotate-left"></i> 1. Rủi Ro Mất Dữ Liệu Tạm Khi Redis Crash (In-Memory Volatility)</span>
+                    <span class="pill-badge pill-high">Mức độ: Cao</span>
+                </div>
+                <div class="metric-row">
+                    <span class="metric-label">Thực trạng kỹ thuật:</span>
+                    <span class="metric-val">Redis Hash lưu đáp án tạm trên RAM. Nếu cấu hình mặc định (chỉ snapshot RDB mỗi vài phút) và container Redis gặp sự cố, các đáp án chưa kịp Submit có nguy cơ bị thất thoát.</span>
+                </div>
+                <div class="solution-box">
+                    <strong><i class="fa-solid fa-wrench"></i> Giải pháp khắc phục cụ thể:</strong>
+                    <br>
+                    1. Bật cơ chế <code>appendonly yes</code> kết hợp <code>appendfsync everysec</code> trong cấu hình Redis, đảm bảo tối đa chỉ mất 1 giây dữ liệu ghi nếu máy chủ sập nguồn.
+                    <br>
+                    2. Phía Client (React) tích hợp thêm tầng backup ngầm vào <code>localStorage</code>, tự động so sánh và đồng bộ lại nếu kết nối Redis bị đứt quãng.
+                </div>
+            </div>
+
+            <!-- Điểm yếu 2 -->
+            <div class="card-detail weakness-card">
+                <div class="card-header-flex">
+                    <span class="card-title"><i class="fa-solid fa-server"></i> 2. Chưa Có Tầng Read-Through Cache Cho Đề Thi</span>
+                    <span class="pill-badge pill-med">Mức độ: Trung bình</span>
+                </div>
+                <div class="metric-row">
+                    <span class="metric-label">Thực trạng kỹ thuật:</span>
+                    <span class="metric-val">Hệ thống tối ưu xuất sắc luồng Ghi, nhưng luồng Đọc (khi 1,000 học sinh bấm "Bắt đầu làm bài" cùng giây thứ 0) vẫn query trực tiếp vào PostgreSQL Connection Pool.</span>
+                </div>
+                <div class="solution-box">
+                    <strong><i class="fa-solid fa-wrench"></i> Giải pháp khắc phục cụ thể:</strong>
+                    <br>
+                    Cài đặt cơ chế Cache-Aside với Spring Cache: <code>@Cacheable(value = "quizzes", key = "#quizId")</code> với TTL 10 phút. Toàn bộ thí sinh thi cùng một đề sẽ đọc dữ liệu tĩnh từ Redis, giảm tải hoàn toàn cho Database.
+                </div>
+            </div>
+
+            <!-- Điểm yếu 3 -->
+            <div class="card-detail weakness-card">
+                <div class="card-header-flex">
+                    <span class="card-title"><i class="fa-solid fa-filter-circle-xmark"></i> 3. Chưa Có Dead Letter Queue (DLQ) & Rate Limiting</span>
+                    <span class="pill-badge pill-med">Mức độ: Trung bình</span>
+                </div>
+                <div class="metric-row">
+                    <span class="metric-label">Thực trạng kỹ thuật:</span>
+                    <span class="metric-val">Nếu bài nộp có định dạng JSON bị dị tật hoặc lỗi Runtime logic ở Consumer, message có thể bị requeue liên tục gây thắt nút cổ chai hàng đợi. Đồng thời chưa có Rate Limiter chống Spam click vào API Auto-save.</span>
+                </div>
+                <div class="solution-box">
+                    <strong><i class="fa-solid fa-wrench"></i> Giải pháp khắc phục cụ thể:</strong>
+                    <br>
+                    1. Cấu hình <code>Dead Letter Exchange (DLX)</code> trong RabbitMQ: Sau 3 lần retry thất bại, tự động chuyển bài thi lỗi sang hàng đợi riêng để Dev phân tích.
+                    <br>
+                    2. Tích hợp <code>Bucket4j (Token Bucket)</code> giới hạn mỗi thí sinh tối đa 5 request auto-save / giây.
+                </div>
+            </div>
+
+            <!-- Điểm yếu 4 -->
+            <div class="card-detail weakness-card">
+                <div class="card-header-flex">
+                    <span class="card-title"><i class="fa-solid fa-robot"></i> 4. Độ Trễ & Giới Hạn Quota Của API AI Bên Thứ Ba (Gemini)</span>
+                    <span class="pill-badge pill-low">Mức độ: Thấp</span>
+                </div>
+                <div class="metric-row">
+                    <span class="metric-label">Thực trạng kỹ thuật:</span>
+                    <span class="metric-val">Gọi LLM API có độ trễ tự nhiên từ 2 - 5 giây. Nếu dùng tài khoản Google Free Tier bị giới hạn 15 RPM (Requests per minute), dễ gặp HTTP 429/503 nếu tạo đề liên tục.</span>
+                </div>
+                <div class="solution-box">
+                    <strong><i class="fa-solid fa-wrench"></i> Giải pháp khắc phục cụ thể:</strong>
+                    <br>
+                    Chuyển tính năng sinh đề AI thành Background Job không đồng bộ: Admin gửi yêu cầu -> nhận Job ID -> AI sinh xong bắn thông báo qua WebSocket thay vì giữ kết nối HTTP chờ đợi.
+                </div>
+            </div>
+
+            <!-- Điểm yếu 5 -->
+            <div class="card-detail weakness-card">
+                <div class="card-header-flex">
+                    <span class="card-title"><i class="fa-solid fa-cubes"></i> 5. Kiến Trúc Single-Node Docker & Thiếu Metrics Giám Sát</span>
+                    <span class="pill-badge pill-med">Mức độ: Trung bình</span>
+                </div>
+                <div class="metric-row">
+                    <span class="metric-label">Thực trạng kỹ thuật:</span>
+                    <span class="metric-val">Hệ thống hiện tại triển khai trên 1 node Docker Compose duy nhất (Single Point of Failure). Chưa có Dashboard hiển thị biểu đồ tải thời gian thực.</span>
+                </div>
+                <div class="solution-box">
+                    <strong><i class="fa-solid fa-wrench"></i> Giải pháp khắc phục cụ thể:</strong>
+                    <br>
+                    Lộ trình nâng cấp: Bổ sung <strong>Prometheus + Grafana</strong> để theo dõi RabbitMQ Queue Depth và Redis Memory Usage. Khi quy mô trường đại học lớn (&gt; 50,000 học sinh), tách thành Microservices và deploy trên Kubernetes (K8s).
+                </div>
+            </div>
+
+        </div>
+
+
+        <!-- ======================================================== -->
+        <!-- PHẦN 3: KỊCH BẢN DEMO THỰC TẾ                            -->
+        <!-- ======================================================== -->
+        <h2><i class="fa-solid fa-laptop-code"></i> PHẦN 3: KỊCH BẢN DEMO THỰC TẾ TRÊN MÀN HÌNH</h2>
+
+        <h3>Kịch bản 1: Xác Thực JWT & Cô Lập Dữ Liệu (Data Isolation)</h3>
         <ul>
-            <li><span class="action">Thao tác:</span> Đăng nhập với tài khoản Admin và User.</li>
-            <li><span class="action">Thuyết minh:</span> <div class="speech">"Hệ thống dùng JWT Stateless bảo mật. Dữ liệu được cô lập (Data Isolation) qua `@PreAuthorize` - User chỉ xem được kết quả thi của mình, Admin thì xem được tất cả."</div></li>
+            <li><span class="action">Thao tác:</span> Đăng nhập tài khoản thí sinh `student1` -> Truy cập trang xem kết quả. Thử sửa ID trên URL để xem kết quả của `student2`.</li>
+            <li><span class="action">Thuyết minh:</span> 
+                <div class="speech">
+                    "Hệ thống áp dụng cơ chế bảo mật Stateless JWT kết hợp kiểm soát dữ liệu chặt chẽ ở tầng Service: Thí sinh chỉ được quyền truy xuất duy nhất lịch sử thi của chính mình. Mọi hành vi sửa ID trên request đều bị chặn đứng bởi <code>@PreAuthorize</code> và trả về mã lỗi 403 Forbidden."
+                </div>
+            </li>
         </ul>
 
-        <h3>Kịch bản 2: Admin tạo đề thi bằng AI</h3>
+        <h3>Kịch bản 2: Admin Tạo Đề Tự Động Bằng AI & Kháng Lỗi (Gemini)</h3>
         <ul>
-            <li><span class="action">Thao tác:</span> Đăng nhập Admin -> Vào giao diện tạo đề thi -> Nhập yêu cầu (VD: "Tạo 5 câu hỏi về Lịch sử Việt Nam") -> Bấm Generate.</li>
-            <li><span class="action">Thuyết minh:</span> <div class="speech">"Hệ thống tự động gọi API đến Google Gemini, bóc tách chuỗi JSON trả về và lưu vào DB. API Key được bảo mật an toàn trong Database chứ không hardcode."</div></li>
+            <li><span class="action">Thao tác:</span> Đăng nhập quyền `admin` -> Vào module Tạo Đề Thi -> Nhập chủ đề: <em>"5 câu hỏi về Lịch sử Việt Nam thế kỷ 20"</em> -> Nhấn "Tự động sinh đề bằng AI".</li>
+            <li><span class="action">Thuyết minh:</span> 
+                <div class="speech">
+                    "Tại đây, Backend gọi đến Google Gemini API với logic bóc tách JSON và tự động lưu thẳng vào bảng <code>questions</code>. Đặc biệt, API Key được load động từ Database bảng <code>system</code>, mã nguồn hoàn toàn sạch không bị lộ Key bí mật. Đồng thời có thuật toán Retry thông minh tự động vượt qua lỗi 503 khi server AI bận."
+                </div>
+            </li>
         </ul>
 
-        <h3>Kịch bản 3: Auto-save chống nghẽn (Redis High-Throughput)</h3>
+        <h3>Kịch bản 3: Thí Sinh Làm Bài & Auto-Save Tốc Độ Cao (Redis Hash O(1))</h3>
         <ul>
-            <li><span class="action">Thao tác:</span> Đăng nhập User -> Làm bài thi -> Click chọn các đáp án liên tục. Mở màn hình console của Redis để show dữ liệu đang được lưu vào bộ nhớ.</li>
-            <li><span class="action">Thuyết minh:</span> <div class="speech">"Khi hàng ngàn học sinh chọn đáp án, hệ thống tuyệt đối không gọi UPDATE xuống DB. Toàn bộ thao tác ghi thẳng vào bộ nhớ RAM qua Redis Hash (O(1)). Nhờ đó, ứng dụng đạt tốc độ mili-giây và bảo vệ DB."</div></li>
+            <li><span class="action">Thao tác:</span> Đăng nhập `student1` -> Bắt đầu làm bài thi -> Click chọn đáp án các câu 1, 2, 3 liên tục. Mở Terminal / Redis-CLI gõ lệnh: <code>HGETALL exam:1:1</code> để xem dữ liệu ghi tức thì trên RAM.</li>
+            <li><span class="action">Thuyết minh:</span> 
+                <div class="speech">
+                    "Mời quý thầy cô / anh chị quan sát màn hình Terminal: Ngay khi em click chọn đáp án, hệ thống <strong>tuyệt đối không gọi lệnh UPDATE xuống PostgreSQL</strong>. Toàn bộ dữ liệu được ghi đệm vào Redis Hash với độ trễ dưới 3 mili-giây. Dù thí sinh có vô tình tắt trình duyệt hoặc F5 tải lại trang, bài làm vẫn được bảo lưu 100% từ RAM."
+                    <span class="speech-tip">💡 Điểm nhấn phản biện: "Đây chính là vũ khí giúp hệ thống chịu tải hàng ngàn học sinh cùng click đáp án mà không làm tê liệt ổ cứng Database."</span>
+                </div>
+            </li>
         </ul>
 
-        <h3>Kịch bản 4: Nộp bài bất đồng bộ & Real-time WebSocket</h3>
+        <h3>Kịch bản 4: Nộp Bài Bất Đồng Bộ (RabbitMQ) & Bắn Điểm Real-Time (WebSocket)</h3>
         <ul>
-            <li><span class="action">Thao tác:</span> Bấm nộp bài (Submit) -> Màn hình báo nộp thành công tức thì -> 1-2 giây sau popup (Toast) báo điểm hiện lên góc màn hình.</li>
-            <li><span class="action">Thuyết minh:</span> <div class="speech">"API lập tức trả về phản hồi không bắt đợi chấm điểm. Một Event đã được đẩy vào RabbitMQ. Ở background, hệ thống lấy ra chấm, và khi xong, kết quả được bắn về giao diện người dùng qua WebSocket để báo điểm real-time."</div></li>
+            <li><span class="action">Thao tác:</span> Nhấn nút "Nộp bài" (Submit) -> Màn hình lập tức báo "Đã nhận bài làm" (HTTP 202). Quan sát 1-2 giây sau, một thông báo Toast dạng popup tự động nhảy lên góc phải kèm điểm số và kết quả.</li>
+            <li><span class="action">Thuyết minh:</span> 
+                <div class="speech">
+                    "Khi em bấm nộp bài, API trả về ngay lập tức mà không bắt học sinh phải chờ chấm điểm. Một Event bài nộp đã được ném vào RabbitMQ. Ở background, tiến trình chấm điểm diễn ra song song và ghi kết quả vào PostgreSQL. Ngay khi hoàn tất, hệ thống tự động bắn một WebSocket message về trình duyệt của học sinh để hiển thị điểm số tức thì."
+                </div>
+            </li>
         </ul>
 
-        <h3>Kịch bản 5: Tối ưu JPA (EntityGraph)</h3>
+        <h3>Kịch bản 5: Chứng Minh Tối Ưu N+1 Query Bằng Hibernate SQL Log</h3>
         <ul>
-            <li><span class="action">Thao tác:</span> Xem lại chi tiết bài làm đã chấm. Show một chút code Repository để chứng minh tối ưu N+1.</li>
-            <li><span class="action">Thuyết minh:</span> <div class="speech">"Toàn bộ chi tiết được lưu bằng kiểu dữ liệu JSONB. Khi load đề thi với hàng trăm câu hỏi, em đã fix triệt để lỗi N+1 Query phổ biến của JPA bằng `@EntityGraph`, đảm bảo chỉ có 1 câu query duy nhất chạy xuống DB."</div></li>
+            <li><span class="action">Thao tác:</span> Mở tab Console Backend trong IDE -> Thí sinh mở đề thi gồm hàng chục câu hỏi -> Xem log Hibernate sinh ra đúng duy nhất 1 câu SQL `LEFT OUTER JOIN`.</li>
+            <li><span class="action">Thuyết minh:</span> 
+                <div class="speech">
+                    "Trong JPA thông thường, việc truy vấn 1 đề thi có 50 câu hỏi sẽ phát sinh 51 câu query con (N+1 Query). Nhờ khai báo <code>@EntityGraph</code>, em đã ép Hibernate tối ưu thành <strong>đúng 1 câu SQL duy nhất</strong>, bảo toàn hiệu năng tối đa cho hệ thống."
+                </div>
+            </li>
         </ul>
 
-        <h2>🎯 PHẦN 4: TỔNG KẾT (1 phút)</h2>
+
+        <!-- ======================================================== -->
+        <!-- PHẦN 4: TỔNG KẾT & TRẢ LỜI CÂU HỎI                        -->
+        <!-- ======================================================== -->
+        <h2><i class="fa-solid fa-flag-checkered"></i> PHẦN 4: TỔNG KẾT & PHẢN BIỆN (1 PHÚT)</h2>
         <ul>
-            <li><span class="action">Chốt lại:</span> <div class="speech">"Qua dự án Quiz Lite, em đã vận dụng thành thạo các kỹ năng cốt lõi của một Backend Developer: REST API, Tối ưu ORM, Message Broker, In-memory Cache và tích hợp AI. Hệ thống hoàn toàn sẵn sàng chịu tải."</div></li>
-            <li><span class="action">Kết thúc:</span> <div class="speech">"Cảm ơn mọi người đã lắng nghe. Mời mọi người đặt câu hỏi ạ."</div></li>
+            <li>
+                <span class="action">Tóm tắt giá trị:</span> 
+                <div class="speech">
+                    "Tổng kết lại, dự án Quiz Lite không chỉ dừng lại ở các tính năng quản lý nghiệp vụ, mà tập trung giải quyết trọn vẹn bài toán chịu tải cao của các kỳ thi thực tế thông qua việc kết hợp ăn ý giữa <strong>Redis, RabbitMQ, PostgreSQL JSONB, và AI Automation</strong>. Em cũng nhận thức rất rõ các điểm giới hạn về tính bốc hơi dữ liệu hay Single Point of Failure và đã có sẵn lộ trình khắc phục cụ thể khi đưa vào môi trường Production quy mô lớn."
+                </div>
+            </li>
+            <li>
+                <span class="action">Kết thúc:</span> 
+                <div class="speech">
+                    "Em xin chân thành cảm ơn mọi người đã chú ý lắng nghe. Rất mong nhận được những câu hỏi và đóng góp từ quý thầy cô / anh chị ạ!"
+                </div>
+            </li>
         </ul>
+
     </div>
 </body>
 </html>

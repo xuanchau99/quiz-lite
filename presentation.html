@@ -325,6 +325,124 @@
             text-anchor: middle;
             dominant-baseline: central;
         }
+
+        /* Java Simple Flow Diagram */
+        .java-arch-container {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            background: rgba(15, 23, 42, 0.85);
+            border-radius: 20px;
+            padding: 35px 25px;
+            border: 1px solid rgba(255, 255, 255, 0.12);
+            box-shadow: 0 15px 40px rgba(0, 0, 0, 0.45);
+            max-width: 1100px;
+            margin: 20px auto 0 auto;
+        }
+
+        .java-arch-node {
+            text-align: center;
+            position: relative;
+            flex: 1;
+        }
+
+        .java-arch-icon {
+            width: 82px;
+            height: 82px;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.04);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 14px auto;
+            border: 2.5px solid rgba(255, 255, 255, 0.2);
+            font-size: 2.3rem;
+            transition: all 0.3s ease;
+        }
+
+        .java-arch-node:hover .java-arch-icon {
+            transform: scale(1.1);
+        }
+
+        .java-arch-node h5 {
+            margin: 0 !important;
+            font-size: 1.25rem !important;
+            font-weight: 700 !important;
+            color: #ffffff !important;
+        }
+
+        .java-arch-node p {
+            font-size: 0.88rem !important;
+            color: #94a3b8 !important;
+            margin: 6px 0 0 0 !important;
+            line-height: 1.3;
+        }
+
+        .java-arch-arrow-block {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            gap: 6px;
+            padding: 0 4px;
+        }
+
+        .java-arrow-tag {
+            font-size: 0.72rem;
+            font-family: 'JetBrains Mono', monospace;
+            font-weight: 600;
+            padding: 2px 8px;
+            border-radius: 12px;
+            background: rgba(255, 255, 255, 0.06);
+            border: 1px solid rgba(255, 255, 255, 0.12);
+            white-space: nowrap;
+        }
+
+        .java-arch-arrow-icon {
+            font-size: 1.8rem;
+            animation: moveArrow 2s infinite linear;
+        }
+
+        .java-return-bar {
+            max-width: 1100px;
+            margin: 30px auto 0 auto;
+            background: rgba(15, 23, 42, 0.75);
+            border: 1px dashed rgba(56, 189, 248, 0.35);
+            border-radius: 50px;
+            padding: 14px 28px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 14px;
+            box-shadow: 0 8px 24px rgba(0, 0, 0, 0.3);
+        }
+
+        .java-return-text {
+            color: #cbd5e1;
+            font-size: 1.05rem;
+            font-weight: 500;
+        }
+
+        .java-return-arrow {
+            color: #38bdf8;
+            font-size: 1.2rem;
+            animation: moveArrowLeft 2s infinite linear;
+        }
+
+        @keyframes moveArrowLeft {
+            0% {
+                transform: translateX(6px);
+                opacity: 0.5;
+            }
+            50% {
+                transform: translateX(-6px);
+                opacity: 1;
+            }
+            100% {
+                transform: translateX(6px);
+                opacity: 0.5;
+            }
+        }
     </style>
 </head>
 
@@ -489,9 +607,96 @@
                 </div>
             </section>
 
-            <!-- SLIDE 5 -->
+            <!-- SLIDE 5: JAVA ARCHITECTURE -->
             <section>
-                <h2 class="slide-title">4. Kiến Trúc Chịu Tải</h2>
+                <h2 class="slide-title">4. Luồng Xử Lý Code Java</h2>
+
+                <!-- Sơ đồ luồng Forward: Client -> Controller -> Service -> Repository -> Database -->
+                <div class="java-arch-container">
+                    <!-- Node 1: Client -->
+                    <div class="java-arch-node">
+                        <div class="java-arch-icon" style="border-color: #38bdf8; color: #38bdf8; box-shadow: 0 0 20px rgba(56, 189, 248, 0.25);">
+                            <i class="fa-solid fa-desktop"></i>
+                        </div>
+                        <h5>Client</h5>
+                        <p>Web / React</p>
+                    </div>
+
+                    <!-- Mũi tên 1: Client -> Controller -->
+                    <div class="java-arch-arrow-block">
+                        <span class="java-arrow-tag" style="color: #38bdf8; border-color: rgba(56, 189, 248, 0.3);">HTTP Request</span>
+                        <i class="fa-solid fa-arrow-right java-arch-arrow-icon" style="color: #38bdf8;"></i>
+                    </div>
+
+                    <!-- Node 2: Controller -->
+                    <div class="java-arch-node">
+                        <div class="java-arch-icon" style="border-color: #60a5fa; color: #60a5fa; box-shadow: 0 0 20px rgba(96, 165, 250, 0.25);">
+                            <i class="fa-solid fa-satellite-dish"></i>
+                        </div>
+                        <h5>Controller</h5>
+                        <p>@RestController</p>
+                    </div>
+
+                    <!-- Mũi tên 2: Controller -> Service -->
+                    <div class="java-arch-arrow-block">
+                        <span class="java-arrow-tag" style="color: #c084fc; border-color: rgba(192, 132, 252, 0.3);">DTO</span>
+                        <i class="fa-solid fa-arrow-right java-arch-arrow-icon" style="color: #c084fc;"></i>
+                    </div>
+
+                    <!-- Node 3: Service -->
+                    <div class="java-arch-node">
+                        <div class="java-arch-icon" style="border-color: #c084fc; color: #c084fc; box-shadow: 0 0 20px rgba(192, 132, 252, 0.25);">
+                            <i class="fa-solid fa-gears"></i>
+                        </div>
+                        <h5>Service</h5>
+                        <p>@Service (Logic)</p>
+                    </div>
+
+                    <!-- Mũi tên 3: Service -> Repository -->
+                    <div class="java-arch-arrow-block">
+                        <span class="java-arrow-tag" style="color: #34d399; border-color: rgba(52, 211, 153, 0.3);">Method Call</span>
+                        <i class="fa-solid fa-arrow-right java-arch-arrow-icon" style="color: #34d399;"></i>
+                    </div>
+
+                    <!-- Node 4: Repository -->
+                    <div class="java-arch-node">
+                        <div class="java-arch-icon" style="border-color: #34d399; color: #34d399; box-shadow: 0 0 20px rgba(52, 211, 153, 0.25);">
+                            <i class="fa-solid fa-database"></i>
+                        </div>
+                        <h5>Repository</h5>
+                        <p>Spring Data JPA</p>
+                    </div>
+
+                    <!-- Mũi tên 4: Repository -> Database -->
+                    <div class="java-arch-arrow-block">
+                        <span class="java-arrow-tag" style="color: #fbbf24; border-color: rgba(251, 191, 36, 0.3);">SQL / ORM</span>
+                        <i class="fa-solid fa-arrow-right java-arch-arrow-icon" style="color: #fbbf24;"></i>
+                    </div>
+
+                    <!-- Node 5: Database -->
+                    <div class="java-arch-node">
+                        <div class="java-arch-icon" style="border-color: #fbbf24; color: #fbbf24; box-shadow: 0 0 20px rgba(251, 191, 36, 0.25);">
+                            <i class="fa-solid fa-server"></i>
+                        </div>
+                        <h5>Database</h5>
+                        <p>PostgreSQL / Redis</p>
+                    </div>
+                </div>
+
+                <!-- Chiều trả về: Response flow -->
+                <div class="java-return-bar">
+                    <i class="fa-solid fa-arrow-left java-return-arrow"></i>
+                    <span class="java-return-text">
+                        <strong style="color: #38bdf8;">Chiều trả về (Response):</strong>
+                        Database ➔ Entity ➔ Repository ➔ Service ➔ DTO ➔ Controller ➔ Client (JSON)
+                    </span>
+                    <i class="fa-solid fa-arrow-left java-return-arrow"></i>
+                </div>
+            </section>
+
+            <!-- SLIDE 6 -->
+            <section>
+                <h2 class="slide-title">5. Kiến Trúc Chịu Tải</h2>
 
                 <div class="arch-container">
                     <div class="arch-node">
@@ -527,9 +732,9 @@
                 </div>
             </section>
 
-            <!-- SLIDE: ERD -->
+            <!-- SLIDE 7: ERD -->
             <section>
-                <h2 class="slide-title" style="margin-bottom: 12px !important; font-size: 2.2rem !important;">5. ERD
+                <h2 class="slide-title" style="margin-bottom: 12px !important; font-size: 2.2rem !important;">6. ERD
                 </h2>
                 <div class="erd-slide-wrapper">
                     <svg viewBox="0 0 1200 640" xmlns="http://www.w3.org/2000/svg">
@@ -788,9 +993,9 @@
                 </div>
             </section>
 
-            <!-- SLIDE 6 -->
+            <!-- SLIDE 8 -->
             <section>
-                <h2 class="slide-title">6. Ứng dụng AI</h2>
+                <h2 class="slide-title">7. Ứng dụng AI</h2>
                 <div
                     style="display: flex; align-items: center; justify-content: center; gap: 50px; background: rgba(30, 41, 59, 0.7); border-radius: 20px; padding: 40px; border: 1px solid rgba(255,255,255,0.1);">
                     <div style="flex: 1; text-align: left;">
@@ -812,7 +1017,7 @@
                 </div>
             </section>
 
-            <!-- SLIDE 7 -->
+            <!-- SLIDE 9 -->
             <section>
                 <h1 class="hero-title"
                     style="font-size: 4rem !important; background: linear-gradient(135deg, #facc15, #fb923c); -webkit-background-clip: text; -webkit-text-fill-color: transparent;">
