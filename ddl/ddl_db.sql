@@ -67,3 +67,14 @@ create table public.questions (
 	constraint questions_pkey primary key (id),
 	constraint fkn3gvco4b0kewxc0bywf1igfms foreign key (quiz_id) references public.quizzes(id)
 );
+
+-- public.system definition
+-- Drop table
+-- DROP TABLE public.system;
+
+create table public.system (
+	config_key varchar(255) not null,
+	config_value text null,
+	constraint system_pkey primary key (config_key)
+);
+

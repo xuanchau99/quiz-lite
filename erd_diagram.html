@@ -280,37 +280,43 @@
                 </g>
             </g>
 
-            <!-- KHUNG 3: THÔNG TIN DATABASE & GHI CHÚ (X: 850, Y: 50) -->
+            <!-- BẢNG 3: SYSTEM (X: 850, Y: 50) -->
             <g transform="translate(850, 50)" filter="url(#shadow)">
-                <rect width="270" height="200" rx="8" class="tbl-body-bg" stroke="var(--fk)" stroke-dasharray="4,4" stroke-opacity="0.5"/>
-                <path d="M 0 8 Q 0 0 8 0 L 262 0 Q 270 0 270 8 L 270 34 L 0 34 Z" fill="rgba(56, 189, 248, 0.12)"/>
-                <text x="14" y="22" class="tbl-title" fill="var(--fk)">DATABASE CHUẨN DỰ ÁN</text>
+                <rect width="270" height="200" rx="8" class="tbl-body-bg"/>
+                <path d="M 0 8 Q 0 0 8 0 L 262 0 Q 270 0 270 8 L 270 34 L 0 34 Z" class="tbl-header-bg"/>
+                <text x="14" y="22" class="tbl-title">SYSTEM</text>
                 <g transform="translate(14, 56)">
-                    <text x="0" y="0" class="col-name" fill="#94a3b8">Database:</text>
-                    <text x="110" y="0" class="col-type" font-weight="700">PostgreSQL</text>
+                    <rect x="0" y="-10" width="22" height="14" rx="3" fill="rgba(245,158,11,0.2)"/>
+                    <text x="3" y="1" class="badge-text" fill="var(--pk)">PK</text>
+                    <text x="28" y="1" class="col-name">config_key</text>
+                    <text x="175" y="1" class="col-type">VARCHAR(255)</text>
 
-                    <text x="0" y="28" class="col-name" fill="#94a3b8">ORM Mapping:</text>
-                    <text x="110" y="28" class="col-type" font-weight="700">Spring Data JPA</text>
+                    <text x="0" y="30" class="col-name">config_value</text>
+                    <text x="175" y="30" class="col-type">TEXT</text>
 
-                    <text x="0" y="56" class="col-name" fill="#94a3b8">Tổng thực thể:</text>
-                    <text x="110" y="56" class="col-type" font-weight="700">5 Bảng chuẩn</text>
+                    <!-- Divider line -->
+                    <line x1="0" y1="52" x2="242" y2="52" stroke="#334155" stroke-dasharray="3,3" />
 
-                    <text x="0" y="84" class="col-name" fill="#94a3b8">Quan hệ Users-Quiz:</text>
-                    <text x="172" y="84" class="col-type" font-weight="700">N - N (Bridge)</text>
+                    <!-- Chú thích / Mục đích -->
+                    <text x="0" y="74" class="col-name" fill="#94a3b8" font-size="10.5px">Mục đích:</text>
+                    <text x="55" y="74" class="col-type" font-size="10.5px" fill="#f1f5f9">Cấu hình hệ thống (Key-Value)</text>
 
-                    <g transform="translate(0, 106)">
+                    <text x="0" y="98" class="col-name" fill="#94a3b8" font-size="10.5px">Ví dụ:</text>
+                    <text x="55" y="98" class="col-type" font-size="10.5px" fill="#c084fc" font-weight="700">gemini_api_key</text>
+
+                    <!-- Chú giải mini PK/FK/UK -->
+                    <g transform="translate(0, 122)">
                         <rect x="0" y="-8" width="22" height="14" rx="3" fill="rgba(245,158,11,0.2)"/>
                         <text x="3" y="3" class="badge-text" fill="var(--pk)">PK</text>
-                        <text x="28" y="3" class="col-name" font-size="10.5px">Khóa chính</text>
+                        <text x="26" y="3" class="col-name" font-size="10px">Khóa chính</text>
 
-                        <rect x="110" y="-8" width="22" height="14" rx="3" fill="rgba(56,189,248,0.2)"/>
-                        <text x="113" y="3" class="badge-text" fill="var(--fk)">FK</text>
-                        <text x="138" y="3" class="col-name" font-size="10.5px">Khóa ngoại</text>
-                    </g>
-                    <g transform="translate(0, 126)">
-                        <rect x="0" y="-8" width="22" height="14" rx="3" fill="rgba(52,211,153,0.2)"/>
-                        <text x="3" y="3" class="badge-text" fill="var(--uk)">UK</text>
-                        <text x="28" y="3" class="col-name" font-size="10.5px">Ràng buộc Unique</text>
+                        <rect x="88" y="-8" width="22" height="14" rx="3" fill="rgba(56,189,248,0.2)"/>
+                        <text x="91" y="3" class="badge-text" fill="var(--fk)">FK</text>
+                        <text x="114" y="3" class="col-name" font-size="10px">Khóa ngoại</text>
+
+                        <rect x="172" y="-8" width="22" height="14" rx="3" fill="rgba(52,211,153,0.2)"/>
+                        <text x="175" y="3" class="badge-text" fill="var(--uk)">UK</text>
+                        <text x="198" y="3" class="col-name" font-size="10px">Unique</text>
                     </g>
                 </g>
             </g>

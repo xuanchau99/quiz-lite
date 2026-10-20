@@ -188,6 +188,11 @@
                     LocalDateTime created_at 
                 }
 
+                system {
+                    String config_key PK "Khóa chính (vd: gemini_api_key)"
+                    Text config_value "Giá trị cấu hình hệ thống"
+                }
+
                 %% Relationships
                 users ||--o{ notifications : "nhận (1-N)"
                 users ||--o{ exam_results : "làm bài (1-N)"
